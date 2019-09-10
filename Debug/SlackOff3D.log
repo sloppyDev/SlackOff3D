@@ -1,0 +1,13 @@
+﻿  Triangle.cpp
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(35,46): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(36,46): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(37,17): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(47,35): warning C4305:  'initializing': truncation from 'double' to 'float'
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(77,30): warning C4244:  'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(77,22): warning C4244:  'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  triple.cpp
+  vector3.cpp
+  testSlackOff3d.cpp
+  Generating Code...
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\Triangle.cpp(77,14): warning C4244:  'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  SlackOff3D.vcxproj -> C:\Users\Joe\source\repos\SlackOff3D\Debug\SlackOff3D.exe
