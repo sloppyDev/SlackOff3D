@@ -1,6 +1,6 @@
 #include "Engine/Engine.h"
 
-#include "Engine/Graphics/Triangle.h"
+#include "Engine/Graphics/MeshManager.h"
 
 using namespace std;
 
@@ -9,15 +9,15 @@ int main()
    cout << "WELCOME" << endl;
    Engine engine;
    engine.Initialize();
-   Triangle triangle;
+   MeshManager meshManager;
 
    while (true)
    {
       engine.Update();
-      triangle.Update();
+      meshManager.Update();
 
       engine.BeginRender();
-      triangle.Render();
+      meshManager.Render();
       engine.EndRender();
    }
 

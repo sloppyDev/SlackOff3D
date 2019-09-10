@@ -84,6 +84,16 @@ vector3 vector3::operator-(const vector3& other)
    return newVec;
 }
 
+vector3 vector3::operator*(const matrix3& other)
+{
+   float a = Dot(*this, other.col1);
+   float b = Dot(*this, other.col2);
+   float c = Dot(*this, other.col3);
+   vector3 newVec(a, b, c);
+
+   return newVec;
+}
+
 vector3 vector3::operator*(const vector3& other)
 {
    vector3 newVec;

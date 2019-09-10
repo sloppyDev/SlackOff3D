@@ -1,21 +1,22 @@
-#ifndef SLACKOFF_TRIANGLE
-#define SLACKOFF_TRIANGLE
+#ifndef SLACKOFF_MESHMANAGER
+#define SLACKOFF_MESHMANAGER
 
 #include "GLFW/glfw3.h"
 #include "../Math/vector3.h"
 #include "../Math/triple.h"
 
 #include <iostream>
+#include <vector>
 
 #define PI 3.14159
 
-class Triangle
+class MeshManager
 {
 public:
-   Triangle();
-   ~Triangle();
+   MeshManager();
+   ~MeshManager();
 
-   void SetPoints(vector3 set1, vector3 set2, vector3 set3);
+   void AddTri(triple in);
    void RotateTo(float rad);
 
    void Update();
@@ -24,6 +25,6 @@ public:
 
 private:
    float ang;
-   triple points;
+   std::vector<triple> mesh;
 };
 #endif
