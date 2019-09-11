@@ -1,9 +1,3 @@
-﻿  MeshManager.cpp
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(20,61): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(21,94): warning C4305:  'argument': truncation from 'double' to 'float'
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(22,61): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(53,71): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(54,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(55,20): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(68,36): warning C4305:  'initializing': truncation from 'double' to 'float'
+﻿  Engine.cpp
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Engine.cpp(121,14): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
   SlackOff3D.vcxproj -> C:\Users\Joe\source\repos\SlackOff3D\Debug\SlackOff3D.exe

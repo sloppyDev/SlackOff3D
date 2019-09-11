@@ -1,10 +1,13 @@
 #include "Engine.h"
 
+#include <sstream>
 using namespace std;
 
+const char* Engine::GAME_NAME{ "SlackOff3D" };
 int Engine::SCREEN_WIDTH{ 1024 };
 int Engine::SCREEN_HEIGHT{ 768 };
-float Engine::aspectRatio{ (float)Engine::SCREEN_WIDTH / (float)Engine::SCREEN_HEIGHT };
+int Engine::SCREEN_DEPTH{ 1000 };
+float Engine::ASPECT_RATIO{ (float)Engine::SCREEN_WIDTH / (float)Engine::SCREEN_HEIGHT };
 float Engine::dt{ 0 };
 
 Engine::Engine()
@@ -48,11 +51,14 @@ bool Engine::Initialize(char* windowTitle)
       cout << "Error creating window!" << endl;
    }
 
+   GAME_NAME = windowTitle;
+
    SetupIO();
    SetupGLFW();
    SetupViewPort();
 
    lastTime = (float)glfwGetTime();
+   lastFpsTime = lastTime;
 
    return true;
 }
@@ -67,6 +73,8 @@ void Engine::Update()
    float now{ (float)glfwGetTime() };
    dt = now - lastTime;
    lastTime = now;
+
+   ShowFps();
 
    glfwPollEvents();
 }
@@ -95,7 +103,6 @@ void Engine::SetupGLFW()
    glfwSwapInterval(1);
 
    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-   cout << mode->width << " " << mode->height << endl;
    int xPos{ (mode->width / 2) - (SCREEN_WIDTH / 2) };
    int yPos{ (mode->height / 2) - (SCREEN_HEIGHT / 2) };
    glfwSetWindowPos(window, xPos, yPos);
@@ -107,4 +114,17 @@ void Engine::SetupViewPort()
    int height{};
    glfwGetFramebufferSize(window, &width, &height);
    glViewport(0, 0, width, height);
+}
+
+void Engine::ShowFps()
+{
+   float now = glfwGetTime();
+   if ((now - lastFpsTime) >= 1.0)
+   {
+      stringstream ss;
+      ss << GAME_NAME << " [" << 1 / dt << " FPS]";
+
+      glfwSetWindowTitle(window, ss.str().c_str());
+      lastFpsTime = now;
+   }
 }

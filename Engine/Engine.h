@@ -10,9 +10,11 @@ class Engine
 {
 public:
    // Static Variables
+   static const char* GAME_NAME;
    static int SCREEN_WIDTH;
    static int SCREEN_HEIGHT;
-   static float aspectRatio;
+   static int SCREEN_DEPTH;
+   static float ASPECT_RATIO;
    static float dt;
 
    // Initializations
@@ -20,7 +22,7 @@ public:
    ~Engine();
 
    bool Initialize();
-   bool Initialize(char* windowTitle);
+   bool Initialize(char* gameName);
 
    // Main Engine Frame Operations
    void Update();
@@ -33,8 +35,10 @@ private:
    void SetupGLFW();
    void SetupViewPort();
 
+   void ShowFps();
    // Private Variables
    GLFWwindow* window;
    float lastTime;
+   float lastFpsTime;
 };
 #endif

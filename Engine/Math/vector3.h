@@ -1,13 +1,16 @@
 #ifndef SLACKOFF_VECTOR3
 #define SLACKOFF_VECTOR3
 
-#include "matrix3.h"
+class matrix3;
 
 class vector3
 {
 public:
    static float Dot(vector3 a, vector3 b);
    static vector3 Cross(vector3 a, vector3 b);
+   static vector3 Project(vector3 a, vector3 b);
+   static float Magnitude(vector3 in);
+   static vector3 Normalize(vector3 in);
 
    // Initialization
    vector3();

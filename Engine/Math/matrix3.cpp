@@ -37,6 +37,25 @@ matrix3::~matrix3()
 
 }
 
+matrix3 matrix3::Identity()
+{
+   vector3 row1 = vector3(1, 0, 0);
+   vector3 row2 = vector3(0, 1, 0);
+   vector3 row3 = vector3(0, 0, 1);
+
+   matrix3 idMat = matrix3(row1, row2, row3);
+   
+   return idMat;
+}
+
+matrix3 matrix3::Inverse(matrix3 in)
+{
+   matrix3 invMat;
+
+   return invMat;
+}
+
+
 void matrix3::UpdateCols()
 {
    // Col 1
@@ -61,6 +80,8 @@ matrix3& matrix3::operator=(const matrix3& other)
    row2 = other.row2;
    row3 = other.row3;
    UpdateCols();
+
+   return *this;
 }
 
 matrix3 matrix3::operator+(const matrix3& other)
@@ -98,15 +119,42 @@ matrix3 matrix3::operator*(const matrix3& other)
    newMat.row1 = vector3(a, b, c);
 
    // Row 2
-   float a = vector3::Dot(row2, other.col1);
-   float b = vector3::Dot(row2, other.col2);
-   float c = vector3::Dot(row2, other.col3);
+   a = vector3::Dot(row2, other.col1);
+   b = vector3::Dot(row2, other.col2);
+   c = vector3::Dot(row2, other.col3);
    newMat.row2 = vector3(a, b, c);
 
    // Row 3
-   float a = vector3::Dot(row3, other.col1);
-   float b = vector3::Dot(row3, other.col2);
-   float c = vector3::Dot(row3, other.col3);
+   a = vector3::Dot(row3, other.col1);
+   b = vector3::Dot(row3, other.col2);
+   c = vector3::Dot(row3, other.col3);
    newMat.row3 = vector3(a, b, c);
 
-}   
+   newMat.UpdateCols();
+
+   return newMat;
+}
+
+vector3 matrix3::operator*(const vector3& other)
+{
+   float a = vector3::Dot(this->row1, other);
+   float b = vector3::Dot(this->row2, other);
+   float c = vector3::Dot(this->row3, other);
+
+   vector3 newVec = vector3(a, b, c);
+
+   return newVec;
+}
+
+matrix3 matrix3::operator*(float in)
+{
+   matrix3 newMat;
+
+   newMat.row1 = row1 * in;
+   newMat.row2 = row2 * in;
+   newMat.row3 = row3 * in;
+
+   newMat.UpdateCols();
+
+   return newMat;
+}

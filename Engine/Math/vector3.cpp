@@ -1,4 +1,5 @@
 #include "vector3.h"
+#include "matrix3.h"
 
 #include <math.h>
 
@@ -49,7 +50,25 @@ vector3 vector3::Cross(vector3 a, vector3 b)
    float s2 = a.z * b.x - a.x * b.z;
    float s3 = a.x * b.y - a.y * b.x;
 
-   return vector3(s1, s2, s3);
+   return Normalize(vector3(s1, s2, s3));
+}
+
+vector3 vector3::Project(vector3 a, vector3 b)
+{
+   vector3 projVec = ((a * b) / Magnitude(a)) * (a / Magnitude(a));
+   return projVec;
+}
+
+float vector3::Magnitude(vector3 in)
+{
+   float mag = sqrt((in.x * in.x) + (in.y * in.y) + (in.z * in.z));
+   return mag;
+}
+
+vector3 vector3::Normalize(vector3 in)
+{
+   vector3 newVec = in / Magnitude(in);
+   return newVec;
 }
 
 // Operators
