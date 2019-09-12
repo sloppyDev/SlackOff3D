@@ -129,6 +129,7 @@
     <ClCompile Include="Engine\Math\Rotation.cpp" />
     <ClCompile Include="Engine\Math\triple.cpp" />
     <ClCompile Include="Engine\Math\vector3.cpp" />
+    <ClCompile Include="Engine\Graphics\Raster.cpp" />
     <ClCompile Include="testSlackOff3d.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +139,7 @@
     <ClInclude Include="Engine\Math\Rotation.h" />
     <ClInclude Include="Engine\Math\triple.h" />
     <ClInclude Include="Engine\Math\vector3.h" />
+    <ClInclude Include="Engine\Graphics\Raster.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
