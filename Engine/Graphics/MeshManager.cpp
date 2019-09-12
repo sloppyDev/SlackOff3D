@@ -343,6 +343,21 @@ void MeshManager::TranslateBy(const char* meshName, vector3 translateVec)
    UpdateCenter(meshName);
 }
 
+vector3 MeshManager::ProjectCenter(vector3 center)
+{
+   vector3 projectedCenter;
+   float fFov = 1 / tan(Rotation::DegToRad(Engine::FOV) / 2);
+   float x = center.x;
+   float y = center.y;
+   float z = center.z;
+   x = x * (fFov / -z);
+   y = y * (fFov / -z);
+   z = z * (-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
+   projectedCenter = vector3(x, y, z);
+
+   return projectedCenter;
+}
+
 std::vector<triple> MeshManager::ProjectMesh(vector<triple> _mesh)
 {
    std::vector<triple> projectedMesh;
@@ -358,9 +373,9 @@ std::vector<triple> MeshManager::ProjectMesh(vector<triple> _mesh)
       float x = tri.p1.x;
       float y = tri.p1.y;
       float z = tri.p1.z;
-      x = x*(fFov / -z);
-      y = y*(fFov / -z);
-      z = z*(-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
+      x = x * (fFov / -z);
+      y = y * (fFov / -z);
+      z = z * (-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
       projectedTri.p1 = vector3(x, y, z);
 
       // P2
@@ -387,7 +402,6 @@ std::vector<triple> MeshManager::ProjectMesh(vector<triple> _mesh)
       z = z*(-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
       projectedTri.p3 = vector3(x, y, z);
       projectedTri.color = tri.color;
-      projectedTri.UpdateCenter();
       projectedMesh.push_back(projectedTri);
    }
    return projectedMesh;
@@ -460,22 +474,26 @@ void MeshManager::Update()
 
    const char* meshName = "cube";
    RotateBy(meshName, rotVec, GetCenter(meshName));
+   TranslateBy(meshName, vector3(0.0f, 0.0f, 0.1f));
    meshName = "cube2";
    RotateBy(meshName, rotVec2, GetCenter(meshName));
+   TranslateBy(meshName, vector3(0.0f, 0.1f, 0.1f));
    meshName = "cube3";
    RotateBy(meshName, rotVec, GetCenter(meshName));
-   //TranslateBy(meshName, vector3(0.0f, 0.0f, 0.1f));
+   TranslateBy(meshName, vector3(0.1f, 0.0f, 0.1f));
 }
 
 void MeshManager::Render()
 {
    std::vector<triple> projectedMesh;
-   std::vector<triple> scaledMesh;
+   vector3 projectedCenter;
 
+   int count = 0;
    for (auto&& mesh : meshes)
    {
       std::vector<triple> toRender;
       projectedMesh = ProjectMesh(mesh);
+      projectedCenter = ProjectCenter(meshCenters[count]);
 
       for (auto&& tri : projectedMesh)
       {
@@ -511,6 +529,14 @@ void MeshManager::Render()
 
          }
          glEnd();
+         glBegin(GL_POINTS);
+         {
+            glColor4f(1, 1, 1, 1);
+            glVertex2f(projectedCenter.x, projectedCenter.y);
+         }
+         glEnd();
       }
+      count++;
    }
+
 }

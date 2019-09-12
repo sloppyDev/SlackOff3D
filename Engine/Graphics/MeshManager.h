@@ -21,6 +21,7 @@ public:
    vector3& GetCenter(const char* meshName);
    void AddTri(triple in);
    void TranslateBy(const char* meshName, vector3 translateVec);
+   vector3 ProjectCenter(vector3 center);
    std::vector<triple> ProjectMesh(std::vector<triple> _mesh);
    std::vector<triple> ScaleMesh(std::vector<triple> _mesh);
    void RotateBy(const char* meshName, vector3 rotVec);

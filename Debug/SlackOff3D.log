@@ -1,5 +1,4 @@
 ﻿  MeshManager.cpp
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.h(42,25): warning C4244:  'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(295): warning C4715:  'MeshManager::GetMesh': not all control paths return a value
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(306): warning C4715:  'MeshManager::GetCenter': not all control paths return a value
+  testSlackOff3d.cpp
+  Generating Code...
   SlackOff3D.vcxproj -> C:\Users\Joe\source\repos\SlackOff3D\Debug\SlackOff3D.exe
