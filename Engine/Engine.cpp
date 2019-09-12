@@ -8,6 +8,7 @@ int Engine::SCREEN_WIDTH{ 1024 };
 int Engine::SCREEN_HEIGHT{ 768 };
 int Engine::SCREEN_DEPTH{ 1000 };
 float Engine::ASPECT_RATIO{ (float)Engine::SCREEN_WIDTH / (float)Engine::SCREEN_HEIGHT };
+float Engine::FOV{ 90 };
 float Engine::dt{ 0 };
 
 Engine::Engine()
@@ -118,7 +119,7 @@ void Engine::SetupViewPort()
 
 void Engine::ShowFps()
 {
-   float now = glfwGetTime();
+   float now = (float)glfwGetTime();
    if ((now - lastFpsTime) >= 1.0)
    {
       stringstream ss;

@@ -15,6 +15,7 @@ public:
    static int SCREEN_HEIGHT;
    static int SCREEN_DEPTH;
    static float ASPECT_RATIO;
+   static float FOV;
    static float dt;
 
    // Initializations

@@ -15,9 +15,16 @@ public:
    MeshManager();
    ~MeshManager();
 
+   void AddMesh(const char* meshName);
+   void UpdateCenter(const char* meshName);
+   std::vector<triple>& GetMesh(const char* meshName);
+   vector3& GetCenter(const char* meshName);
    void AddTri(triple in);
-   std::vector<triple> ScaleMesh();
-   void RotateBy(float rad);
+   void TranslateBy(const char* meshName, vector3 translateVec);
+   std::vector<triple> ProjectMesh(std::vector<triple> _mesh);
+   std::vector<triple> ScaleMesh(std::vector<triple> _mesh);
+   void RotateBy(const char* meshName, vector3 rotVec);
+   void RotateBy(const char* meshName, vector3 rotVec, vector3 rotPoint);
    vector3 ComputeNormal(triple tri);
    bool InView(triple tri);
 
@@ -28,6 +35,11 @@ private:
    static vector3 SCALE_VEC;
    static vector3 ASPECT_VEC;
    float ang;
-   std::vector<triple> mesh;
+   std::vector<triple> activeMesh;
+   std::vector<std::vector<triple>> meshes;
+   std::vector<const char*> meshNames;
+   std::vector<vector3> meshCenters;
+   float zFar = (float)Engine::SCREEN_DEPTH;
+   float zNear = 1.0f;
 };
 #endif

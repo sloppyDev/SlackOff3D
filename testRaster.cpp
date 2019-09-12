@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-   cout << "SlackOff3D Test" << endl;
+   cout << "Raster Test" << endl;
    Engine engine;
    engine.Initialize();
    MeshManager meshManager;

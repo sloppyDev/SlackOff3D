@@ -61,7 +61,7 @@ vector3 vector3::Project(vector3 a, vector3 b)
 
 float vector3::Magnitude(vector3 in)
 {
-   float mag = sqrt((in.x * in.x) + (in.y * in.y) + (in.z * in.z));
+   float mag = (float)sqrt((in.x * in.x) + (in.y * in.y) + (in.z * in.z));
    return mag;
 }
 
