@@ -2,6 +2,9 @@
 #define SLACKOFF_ENGINE
 
 #include "GLFW/glfw3.h"
+#include "IO/Mouse.h"
+#include "IO/Keyboard.h"
+
 #pragma comment(lib, "opengl32.lib")
 
 #include <iostream>

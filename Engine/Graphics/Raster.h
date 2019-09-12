@@ -27,6 +27,5 @@ private:
 
    float xPixelIncrement{ 2 / (float)Engine::SCREEN_WIDTH };
    float yPixelIncrement{ 2 / (float)Engine::SCREEN_HEIGHT };
-
 };
 #endif

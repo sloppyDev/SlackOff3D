@@ -92,7 +92,9 @@ void Engine::EndRender()
 
 void Engine::SetupIO()
 {
-
+   glfwSetCursorPosCallback(window, Mouse::MousePosCallback);
+   glfwSetMouseButtonCallback(window, Mouse::MouseButtonCallback);
+   glfwSetKeyCallback(window, Keyboard::KeyCallback);
 }
 
 void Engine::SetupGLFW()
