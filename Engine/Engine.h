@@ -41,5 +41,7 @@ private:
    GLFWwindow* window;
    float lastTime;
    float lastFpsTime;
+   float dtAve;
+   int frameCount{ 0 };
 };
 #endif

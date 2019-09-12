@@ -248,6 +248,8 @@ void Raster::DrawLine(vector3 p1, vector3 p2)
       glVertex2f(leftX, leftY);
       glVertex2f(rightX, rightY);
    }
+   glEnd();
+
    //glBegin(GL_POINTS);
    //{
    //   glColor4f(color.x, color.y, color.z, 1);
@@ -257,7 +259,7 @@ void Raster::DrawLine(vector3 p1, vector3 p2)
    //      xDraw += xPixelIncrement;
    //   }
    //}
-   glEnd();
+   //glEnd();
 }
 
 void Raster::DrawWireframe(triple tri)

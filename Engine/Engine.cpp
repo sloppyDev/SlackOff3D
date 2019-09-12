@@ -120,10 +120,15 @@ void Engine::SetupViewPort()
 void Engine::ShowFps()
 {
    float now = (float)glfwGetTime();
+   dtAve += dt;
+   frameCount++;
    if ((now - lastFpsTime) >= 1.0)
    {
       stringstream ss;
-      ss << GAME_NAME << " [" << 1 / dt << " FPS]";
+      ss << GAME_NAME << " [" << 1/(dtAve/frameCount) << " FPS]";
+
+      frameCount = 0;
+      dtAve = 0;
 
       glfwSetWindowTitle(window, ss.str().c_str());
       lastFpsTime = now;
