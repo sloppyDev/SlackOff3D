@@ -9,11 +9,13 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 class MeshManager
 {
 public:
-   MeshManager();
+   MeshManager(std::vector<vector3> cameraPose);
    ~MeshManager();
 
    void ShadeMesh(std::vector<triple>& _mesh);
@@ -25,14 +27,18 @@ public:
    void TranslateBy(const char* meshName, vector3 translateVec);
    vector3 ProjectCenter(vector3 center);
    std::vector<triple> ProjectMesh(std::vector<triple> _mesh);
-   std::vector<triple> ScaleMesh(std::vector<triple> _mesh);
+   std::vector<triple> ScaleMesh(std::vector<triple> _mesh, float mult);
+   void ScaleMesh(const char* meshName, float mult);
    void RotateBy(const char* meshName, vector3 rotVec);
    void RotateBy(const char* meshName, vector3 rotVec, vector3 rotPoint);
    vector3 ComputeNormal(triple tri);
    bool InView(triple tri);
+   bool LoadMesh(std::string fileName);
 
-   void Update();
+   void Update(std::vector<vector3> cameraPose);
    void Render();
+
+   void TransformMesh(bool translate, bool rotate);
 
 private:
    Raster rasterer;
@@ -40,10 +46,16 @@ private:
    static vector3 ASPECT_VEC;
    float ang;
    std::vector<triple> activeMesh;
-   std::vector<std::vector<triple>> meshes;
+   std::vector<std::vector<triple>> worldMeshes;
+   std::vector<std::vector<triple>> screenMeshes;
    std::vector<const char*> meshNames;
    std::vector<vector3> meshCenters;
    float zFar = (float)Engine::SCREEN_DEPTH;
    float zNear = 1.0f;
+
+   vector3 cameraPos;
+   vector3 cameraAng;
+   vector3 cameraPosDiff;
+   vector3 cameraAngDiff;
 };
 #endif

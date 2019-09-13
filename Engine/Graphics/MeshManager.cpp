@@ -8,93 +8,103 @@ using namespace std;
 vector3 MeshManager::ASPECT_VEC = vector3(1.0f, (float)Engine::ASPECT_RATIO, 1.0f);
 vector3 MeshManager::SCALE_VEC = vector3((float)Engine::SCREEN_WIDTH, (float)Engine::SCREEN_WIDTH, (float)Engine::SCREEN_WIDTH);
 
-MeshManager::MeshManager()
+MeshManager::MeshManager(vector<vector3> cameraPose)
 {
+   cameraPos = cameraPose[0];
+   cameraAng = cameraPose[1];
+   cameraPosDiff = cameraPos;
+   cameraAngDiff = cameraAng;
+
+   LoadMesh("C:/Users/Joe/Desktop/utahTeapot.obj");
+   ScaleMesh(meshNames[0], 10.0f);
+   TranslateBy(meshNames[0], vector3(0.0f, 0.0f, 500.0f));
+
+      
    Raster rasterer;
-   float sideLength = 50.0f;
-   vector3 set1 = vector3();
-   vector3 set2 = vector3();
-   vector3 set3 = vector3();
-   vector3 frontColor = vector3(1.0f, 0.0f, 0.0f); // red
-   vector3 rightColor = vector3(1.0f, 1.0f, 0.0f); // yellow
-   vector3 backColor = vector3(0.0f, 1.0f, 0.0f); // green
-   vector3 bottomColor = vector3(0.0f, 1.0f, 1.0f); // cyan
-   vector3 leftColor = vector3(0.0f, 0.0f, 1.0f); // blue
-   vector3 topColor = vector3(1.0f, 0.0f, 1.0f); // pink
-   
-   // Front 1
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(0.0f, sideLength, 0.0f);
-   set3 = vector3(sideLength, sideLength, 0.0f);
-   AddTri(triple(set1, set2, set3, frontColor));
+   //float sideLength = 50.0f;
+   //vector3 set1 = vector3();
+   //vector3 set2 = vector3();
+   //vector3 set3 = vector3();
+   //vector3 frontColor = vector3(1.0f, 0.0f, 0.0f); // red
+   //vector3 rightColor = vector3(1.0f, 1.0f, 0.0f); // yellow
+   //vector3 backColor = vector3(0.0f, 1.0f, 0.0f); // green
+   //vector3 bottomColor = vector3(0.0f, 1.0f, 1.0f); // cyan
+   //vector3 leftColor = vector3(0.0f, 0.0f, 1.0f); // blue
+   //vector3 topColor = vector3(1.0f, 0.0f, 1.0f); // pink
+   //
+   //// Front 1
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(0.0f, sideLength, 0.0f);
+   //set3 = vector3(sideLength, sideLength, 0.0f);
+   //AddTri(triple(set1, set2, set3, frontColor));
 
-   // Front 2
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(sideLength, sideLength, 0.0f);
-   set3 = vector3(sideLength, 0.0f, 0.0f);
-   AddTri(triple(set1, set2, set3, frontColor));
+   //// Front 2
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, sideLength, 0.0f);
+   //set3 = vector3(sideLength, 0.0f, 0.0f);
+   //AddTri(triple(set1, set2, set3, frontColor));
 
-   // Right 1
-   set1 = vector3(sideLength, 0.0f, 0.0f);
-   set2 = vector3(sideLength, sideLength, 0.0f);
-   set3 = vector3(sideLength, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, rightColor));
+   //// Right 1
+   //set1 = vector3(sideLength, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, sideLength, 0.0f);
+   //set3 = vector3(sideLength, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, rightColor));
 
-   // Right 2
-   set1 = vector3(sideLength, 0.0f, 0.0f);
-   set2 = vector3(sideLength, sideLength, sideLength);
-   set3 = vector3(sideLength, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, rightColor));
+   //// Right 2
+   //set1 = vector3(sideLength, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, sideLength, sideLength);
+   //set3 = vector3(sideLength, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, rightColor));
 
-   // Back 1
-   set1 = vector3(sideLength, 0.0f, sideLength);
-   set2 = vector3(sideLength, sideLength, sideLength);
-   set3 = vector3(0.0f, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, backColor));
+   //// Back 1
+   //set1 = vector3(sideLength, 0.0f, sideLength);
+   //set2 = vector3(sideLength, sideLength, sideLength);
+   //set3 = vector3(0.0f, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, backColor));
 
-   // Back 2
-   set1 = vector3(0.0f, 0.0f, sideLength);
-   set2 = vector3(sideLength, sideLength, sideLength);
-   set3 = vector3(0.0f, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, backColor));
+   //// Back 2
+   //set1 = vector3(0.0f, 0.0f, sideLength);
+   //set2 = vector3(sideLength, sideLength, sideLength);
+   //set3 = vector3(0.0f, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, backColor));
 
-   // Bottom 1
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(sideLength, 0.0f, 0.0f);
-   set3 = vector3(0.0f, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, bottomColor));
+   //// Bottom 1
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, 0.0f, 0.0f);
+   //set3 = vector3(0.0f, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, bottomColor));
 
-   // Bottom 2
-   set1 = vector3(sideLength, 0.0f, 0.0f);
-   set2 = vector3(sideLength, 0.0f, sideLength);
-   set3 = vector3(0.0f, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, bottomColor));
+   //// Bottom 2
+   //set1 = vector3(sideLength, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, 0.0f, sideLength);
+   //set3 = vector3(0.0f, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, bottomColor));
 
-   // Left 1
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(0.0f, sideLength, sideLength);
-   set3 = vector3(0.0f, sideLength, 0.0f);
-   AddTri(triple(set1, set2, set3, leftColor));
+   //// Left 1
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(0.0f, sideLength, sideLength);
+   //set3 = vector3(0.0f, sideLength, 0.0f);
+   //AddTri(triple(set1, set2, set3, leftColor));
 
-   // Left 2
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(0.0f, 0.0f, sideLength);
-   set3 = vector3(0.0f, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, leftColor));
+   //// Left 2
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(0.0f, 0.0f, sideLength);
+   //set3 = vector3(0.0f, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, leftColor));
 
-   // Top 1
-   set1 = vector3(0.0f, sideLength, 0.0f);
-   set2 = vector3(0.0f, sideLength, sideLength);
-   set3 = vector3(sideLength, sideLength, 0.0f);
-   AddTri(triple(set1, set2, set3, topColor));
+   //// Top 1
+   //set1 = vector3(0.0f, sideLength, 0.0f);
+   //set2 = vector3(0.0f, sideLength, sideLength);
+   //set3 = vector3(sideLength, sideLength, 0.0f);
+   //AddTri(triple(set1, set2, set3, topColor));
 
-   // Top 2
-   set1 = vector3(sideLength, sideLength, 0.0f);
-   set2 = vector3(0.0f, sideLength, sideLength);
-   set3 = vector3(sideLength, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, topColor));
-   AddMesh("cube");
-   TranslateBy("cube", vector3(-sideLength / 2, -sideLength / 2, 100.0f));
+   //// Top 2
+   //set1 = vector3(sideLength, sideLength, 0.0f);
+   //set2 = vector3(0.0f, sideLength, sideLength);
+   //set3 = vector3(sideLength, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, topColor));
+   //AddMesh("cube");
+   //TranslateBy("cube", vector3(-sideLength / 2, -sideLength / 2, 100.0f));
 
 
 
@@ -301,6 +311,8 @@ MeshManager::MeshManager()
    //AddTri(triple(set1, set2, set3, topColor));
    //AddMesh("triangleWeirdPoint");
    //TranslateBy("triangleWeirdPoint", vector3((-sideLength / 2) - 100.0f, (-sideLength / 2) + 100.0f, 300.0f));
+
+   TransformMesh(true, true);
 }
 
 MeshManager::~MeshManager()
@@ -308,9 +320,51 @@ MeshManager::~MeshManager()
 
 }
 
+bool MeshManager::LoadMesh(std::string fileName)
+{
+   std::ifstream f(fileName);
+   if (!f.is_open())
+   {
+      return false;
+   }
+   
+   std::vector<vector3> verts;
+
+   while (!f.eof())
+   {
+      char line[128];
+      f.getline(line, 128);
+
+      std::stringstream ss;
+      ss << line;
+
+      char temp;
+
+      if (line[0] == 'v')
+      {
+         vector3 v;
+         ss >> temp >> v.x >> v.y >> v.z;
+         verts.push_back(v);
+      }
+
+      if (line[0] == 'f')
+      {
+         int f[3];
+         ss >> temp >> f[0] >> f[1] >> f[2];
+         AddTri(triple(verts[f[0]-1], verts[f[1]-1], verts[f[2]-1]));
+      }
+   }
+
+   fileName.pop_back();
+   fileName.pop_back();
+   fileName.pop_back();
+   const char* meshName = fileName.c_str();
+   AddMesh(meshName);
+}
+
 void MeshManager::AddMesh(const char* meshName)
 {
-   meshes.push_back(activeMesh);
+   worldMeshes.push_back(activeMesh);
    meshNames.push_back(meshName);
    meshCenters.push_back(vector3());
    UpdateCenter(meshName);
@@ -352,11 +406,11 @@ vector<triple>& MeshManager::GetMesh(const char* meshName)
    }
    if (IDX < meshNames.size())
    {
-      return meshes[IDX];
+      return worldMeshes[IDX];
    }
    else
    {
-      return meshes[0];
+      return worldMeshes[0];
    }
 }
 
@@ -449,25 +503,32 @@ std::vector<triple> MeshManager::ProjectMesh(vector<triple> _mesh)
       y = Engine::ASPECT_RATIO * y * (fFov / z);
       z = z*(-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
       projectedTri.p3 = vector3(x, y, z);
+      projectedTri.UpdateCenter();
       projectedTri.color = tri.color;
       projectedMesh.push_back(projectedTri);
    }
    return projectedMesh;
 }
 
-std::vector<triple> MeshManager::ScaleMesh(vector<triple> _mesh)
+std::vector<triple> MeshManager::ScaleMesh(vector<triple> _mesh, float mult)
 {
    std::vector<triple> scaledMesh;
 
    for (auto&& tri : _mesh)
    {
-      triple tri1 = tri / SCALE_VEC;
-      triple tri2 = tri1 * ASPECT_VEC;
-      scaledMesh.push_back(tri2);
+      scaledMesh.push_back(tri*mult);
    }
    return scaledMesh;
 }
 
+void MeshManager::ScaleMesh(const char* meshName, float mult)
+{
+   for (auto&& tri : GetMesh(meshName))
+   {
+      tri = tri * mult;
+   }
+   UpdateCenter(meshName);
+}
 void MeshManager::RotateBy(const char* meshName, vector3 rotVec)
 {
    for (auto&& tri : GetMesh(meshName))
@@ -521,20 +582,37 @@ void MeshManager::ShadeMesh(std::vector<triple>& _mesh)
       vector3 normal = ComputeNormal(tri);
       vector3 lightLine = vector3::Normalize(tri.center - vector3(0.0f, 0.0f, 100.0f));
       
-      luminance = -vector3::Dot(normal, lightLine)*100;
+      luminance = -vector3::Dot(normal, lightLine)*10;
       tri.color = vector3(luminance);
    }
 }
-void MeshManager::Update()
+void MeshManager::Update(std::vector<vector3> cameraPose)
 {
-   vector3 angVel = vector3(20.0f, 20.0f, -20.0f);
-   vector3 angVel2 = vector3(-20.0f, -20.0f, 20.0f);
-   float dt = Engine::dt;
-   vector3 rotVec = angVel * dt;
-   vector3 rotVec2 = angVel2 * dt;
+   bool translate = false;
+   bool rotate = false;
+   if (cameraPose[0] != cameraPos) 
+   {
+      cameraPosDiff = cameraPose[0] - cameraPos;
+      cameraPos = cameraPose[0];
+      translate = true;
+   }
+   if (cameraPose[1] != cameraAng)
+   {
+      cameraAngDiff = cameraPose[1] - cameraAng;
+      cameraAng = cameraPose[1];
+      rotate = true;
+   }
 
-   const char* meshName = meshNames[0];
-   RotateBy(meshName, rotVec, GetCenter(meshName));
+   TransformMesh(translate, rotate);
+
+   //vector3 angVel = vector3(20.0f, 20.0f, -20.0f);
+   //vector3 angVel2 = vector3(-20.0f, -20.0f, 20.0f);
+   //float dt = Engine::dt;
+   //vector3 rotVec = angVel * dt;
+   //vector3 rotVec2 = angVel2 * dt;
+
+   //const char* meshName = meshNames[0];
+   //RotateBy(meshName, rotVec, GetCenter(meshName));
    //meshName = meshNames[1];
    //RotateBy(meshName, rotVec, GetCenter(meshName));
    //meshName = meshNames[2];
@@ -558,8 +636,9 @@ void MeshManager::Render()
    vector3 projectedCenter;
 
    int count = 0;
-   for (auto&& mesh : meshes)
+   for (auto&& mesh : screenMeshes)
    {
+
       std::vector<triple> toRender;
       projectedMesh = ProjectMesh(mesh);
       projectedCenter = ProjectCenter(meshCenters[count]);
@@ -571,46 +650,43 @@ void MeshManager::Render()
             toRender.push_back(tri);
          }
       }
-
       ShadeMesh(toRender);
       
+      std::sort(toRender.begin(), toRender.end(), [](triple& tri1, triple& tri2)
+         {
+            return (tri2.center.z > tri1.center.z);
+         });
+
       glColor4f(1, 1, 1, 1);
       glLineWidth(2.5);
       glPointSize(2.5);
       glEnd();
       for (auto&& tri : toRender)
       {
-         rasterer.DrawTriangle(tri, true);
-         //normal = ComputeNormal(tri);
-         //glBegin(GL_LINES);
-         //{
-
-         //   glColor4f(tri.color.x, tri.color.y, tri.color.z, 1);
-         //   glVertex2f(tri.p1.x, tri.p1.y);
-         //   glVertex2f(tri.p2.x, tri.p2.y);
-
-         //   glVertex2f(tri.p2.x, tri.p2.y);
-         //   glVertex2f(tri.p3.x, tri.p3.y);
-
-         //   glVertex2f(tri.p3.x, tri.p3.y);
-         //   glVertex2f(tri.p1.x, tri.p1.y);
-
-         //   //glColor4f(tri.color.x, tri.color.y, tri.color.z, 1);
-         //   //glVertex2f(normal.x + tri.center.x, normal.y + tri.center.y);
-         //   //glVertex2f(tri.center.x, tri.center.y);
-
-         //}
-         //glEnd();
-         //glBegin(GL_POINTS);
-         //{
-         //   glColor4f(0, 1, 0, 1);
-         //   glVertex2f(tri.p2.x, tri.p2.y);
-         //   glColor4f(0, 0, 1, 1);
-         //   glVertex2f(tri.p3.x, tri.p3.y);
-         //}
-         //glEnd();
+         rasterer.DrawTriangle(tri, false);
       }
       count++;
    }
 
+}
+
+void MeshManager::TransformMesh(bool translate, bool rotate)
+{
+   screenMeshes.clear();
+   triple tempTri;
+   for (auto&& mesh : worldMeshes)
+   {
+      std::vector<triple> newMesh;
+      for (auto&& tri : mesh)
+      {
+         tempTri = tri + cameraPos;
+         
+         tempTri = Rotation::Rotate(tempTri, 3, cameraAng.z);
+         tempTri = Rotation::Rotate(tempTri, 2, cameraAng.y);
+         tempTri = Rotation::Rotate(tempTri, 1, cameraAng.x);
+         tempTri.UpdateCenter();
+         newMesh.push_back(tempTri);
+      }
+      screenMeshes.push_back(newMesh);
+   }
 }

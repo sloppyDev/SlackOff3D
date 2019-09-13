@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Engine\Graphics\CameraManager.cpp" />
     <ClCompile Include="Engine\Graphics\MeshManager.cpp" />
     <ClCompile Include="Engine\IO\Mouse.cpp" />
     <ClCompile Include="Engine\Math\matrix3.cpp" />
@@ -136,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\Graphics\CameraManager.h" />
     <ClInclude Include="Engine\Graphics\MeshManager.h" />
     <ClInclude Include="Engine\Math\matrix3.h" />
     <ClInclude Include="Engine\Math\Rotation.h" />

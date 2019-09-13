@@ -14,6 +14,7 @@ public:
    static matrix3 rot2(float angle);
    static matrix3 rot3(float angle);
 
+   static vector3 Rotate(vector3 vec, vector3 angVec);
    static vector3 Rotate(vector3 vec, unsigned int axis, float angle);
    static vector3 Rotate(vector3 vec, unsigned int axis, float angle, vector3 rotPoint);
    static triple Rotate(triple tri, unsigned int axis, float angle);

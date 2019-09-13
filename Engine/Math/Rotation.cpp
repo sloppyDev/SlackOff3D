@@ -35,6 +35,14 @@ matrix3 Rotation::rot3(float angle)
    return newMat;
 }
 
+vector3 Rotation::Rotate(vector3 vec, vector3 angVec)
+{
+   vector3 rotVec = Rotate(vec, 3, angVec.z);
+   rotVec = Rotate(rotVec, 2, angVec.y);
+   rotVec = Rotate(rotVec, 1, angVec.x);
+
+   return rotVec;
+}
 vector3 Rotation::Rotate(vector3 vec, unsigned int axis, float angle)
 {
    float rad = DegToRad(angle);

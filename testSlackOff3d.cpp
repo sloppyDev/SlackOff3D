@@ -1,6 +1,7 @@
 #include "Engine/Engine.h"
 
 #include "Engine/Graphics/MeshManager.h"
+#include "Engine/Graphics/CameraManager.h"
 
 using namespace std;
 
@@ -9,12 +10,15 @@ int main()
    cout << "SlackOff3D Test" << endl;
    Engine engine;
    engine.Initialize();
-   MeshManager meshManager;
+   CameraManager cameraManager;
+   MeshManager meshManager(cameraManager.GetPose());
+
 
    while (true)
    {
       engine.Update();
-      meshManager.Update();
+      cameraManager.Update();
+      meshManager.Update(cameraManager.GetPose());
 
       engine.BeginRender();
       meshManager.Render();
