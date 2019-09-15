@@ -3,7 +3,7 @@
 CameraManager::CameraManager()
 {
    pos = vector3(0.0f, 0.0f, -1.0f);
-   ang = vector3();
+   quat = quaternion(0.0f, vector3(0.0f, 1.0f, 0.0f));
    transRate = vector3(100.0f);
    rotRate = vector3(100.0f);
 }
@@ -11,11 +11,12 @@ CameraManager::CameraManager()
 CameraManager::CameraManager(vector3 _pos) : CameraManager()
 {
    pos = _pos;
+   lastPos = pos;
 }
 
 CameraManager::CameraManager(vector3 _pos, vector3 _ang) : CameraManager(_pos)
 {
-   ang = _ang;
+   quat = quaternion::EulerToQuat(_ang);
 }
 
 CameraManager::CameraManager(vector3 _pos, vector3 _ang, vector3 _transRate) : CameraManager(_pos, _ang)
@@ -36,8 +37,11 @@ CameraManager::~CameraManager()
 void CameraManager::Update()
 {
    HandleInputs();
-   //std::cout << "POS: X: " << pos.x << "Y: " << pos.y << "Z: " << pos.z << std::endl;
-   //std::cout << "ANG: X: " << ang.x << "Y: " << ang.y << "Z: " << ang.z << std::endl << std::endl;
+
+   //std::cout << "\rPOS: X: " << pos.x - lastPos.x << ", Y: " << pos.y - lastPos.y << ", Z: " << pos.z - lastPos.z << "                                                   ";
+   std::cout << "\rPOS: X: " << pos.x << ", Y: " << pos.y << ", Z: " << pos.z << "                                                  " << std::endl;
+   std::cout << "QUAT: R: " << quat.r << ", X: " << quat.v.x << ", Y: " << quat.v.y << ", Z: " << quat.v.z << "                                             " << "\x1b[A";
+   lastPos = pos;
 }
 
 void CameraManager::HandleInputs()
@@ -48,22 +52,22 @@ void CameraManager::HandleInputs()
    // Translation
    if (Keyboard::Key(forwardKey)) // Forward
    {
-      Translate(3, -translateValues.z);
+      Translate(3, translateValues.z);
    }
 
    if (Keyboard::Key(leftKey)) // Left
    {
-      Translate(1, translateValues.x);
+      Translate(1, -translateValues.x);
    }
 
-   if (Keyboard::Key(backKey)) // Down
+   if (Keyboard::Key(backKey)) // Back
    {
-      Translate(3, translateValues.z);
+      Translate(3, -translateValues.z);
    }
 
    if (Keyboard::Key(rightKey)) // Right
    {
-      Translate(1, -translateValues.x);
+      Translate(1, translateValues.x);
    }
 
    if (Keyboard::Key(upKey)) // Up
@@ -79,22 +83,22 @@ void CameraManager::HandleInputs()
    // Rotation
    if (Keyboard::Key(rotUpKey)) // Up
    {
-      Rotate(1, rotateValues.x);
+      Rotate(1, -rotateValues.x);
    }
 
    if (Keyboard::Key(rotLeftKey)) // Left
    {
-      Rotate(2, rotateValues.y);
+      Rotate(2, -rotateValues.y);
    }
 
    if (Keyboard::Key(rotDownKey)) // Down
    {
-      Rotate(1, -rotateValues.x);
+      Rotate(1, rotateValues.x);
    }
 
    if (Keyboard::Key(rotRightKey)) // Right
    {
-      Rotate(2, -rotateValues.y);
+      Rotate(2, rotateValues.y);
    }
 
    if (Keyboard::Key(rollLeftKey)) // Roll Left
@@ -111,6 +115,7 @@ void CameraManager::HandleInputs()
 void CameraManager::Translate(int axis, float magnitude)
 {
    vector3 cameraTransVec;
+   vector3 cameraTransRot;
    vector3 worldTransVec;
 
    switch (axis)
@@ -118,21 +123,21 @@ void CameraManager::Translate(int axis, float magnitude)
    case 1:
    {
       cameraTransVec = vector3(magnitude, 0.0f, 0.0f);
-      worldTransVec = Rotation::Rotate(cameraTransVec, ang*-1);
+      worldTransVec = Rotation::Rotate(cameraTransVec, quat, 0);
       pos = pos + worldTransVec;
    }
    break;
    case 2:
    {
       cameraTransVec = vector3(0.0f, magnitude, 0.0f);
-      worldTransVec = Rotation::Rotate(cameraTransVec, ang*-1);
+      worldTransVec = Rotation::Rotate(cameraTransVec, quat, 0);
       pos = pos + worldTransVec;
    }
    break;
    case 3:
    {
       cameraTransVec = vector3(0.0f, 0.0f, magnitude);
-      worldTransVec = Rotation::Rotate(cameraTransVec, ang*-1);
+      worldTransVec = Rotation::Rotate(cameraTransVec, quat, 0);
       pos = pos + worldTransVec;
    }
    break;
@@ -149,36 +154,36 @@ void CameraManager::Rotate(int axis, float deg)
    case 1:
    {
       cameraRotVec = vector3(deg, 0.0f, 0.0f);
-      worldRotVec = Rotation::Rotate(cameraRotVec, ang);
-      worldRotVec = cameraRotVec;
-      ang = ang + worldRotVec;
+      worldRotVec = Rotation::Rotate(cameraRotVec, quat, 0);
+      quaternion newQuat(worldRotVec);
+      quat = newQuat*quat;
    }
    break;
    case 2:
    {
       cameraRotVec = vector3(0.0f, deg, 0.0f);
-      worldRotVec = Rotation::Rotate(cameraRotVec, ang);
-      worldRotVec = cameraRotVec;
-      ang = ang + worldRotVec;
+      worldRotVec = Rotation::Rotate(cameraRotVec, quat, 0);
+      quaternion newQuat = quaternion(worldRotVec);
+      quat = newQuat*quat;
    }
    break;
    case 3:
    {
       cameraRotVec = vector3(0.0f, 0.0f, deg);
-      worldRotVec = Rotation::Rotate(cameraRotVec, ang);
-      worldRotVec = cameraRotVec;
-      ang = ang + worldRotVec;
+      worldRotVec = Rotation::Rotate(cameraRotVec, quat, 0);
+      quaternion newQuat(worldRotVec);
+      quat = newQuat*quat;
    }
    break;
    }
 }
 
-std::vector<vector3> CameraManager::GetPose()
+vector3 CameraManager::GetPos()
 {
-   std::vector<vector3> poseVec;
+   return pos;
+}
 
-   poseVec.push_back(pos);
-   poseVec.push_back(ang);
-
-   return poseVec;
+quaternion CameraManager::GetQuat()
+{
+   return quat;
 }

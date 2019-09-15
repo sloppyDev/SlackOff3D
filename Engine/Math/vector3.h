@@ -33,6 +33,8 @@ public:
    bool operator==(const vector3& other);
    bool operator!=(const vector3& other);
 
+   void Normalize();
+
    // Stored Elements
    float x;
    float y;

@@ -5,6 +5,7 @@
 #include "../Math/vector3.h"
 #include "../Math/triple.h"
 #include "../Math/Rotation.h"
+#include "../Math/Quaternion.h"
 #include "Raster.h"
 
 #include <iostream>
@@ -15,7 +16,7 @@
 class MeshManager
 {
 public:
-   MeshManager(std::vector<vector3> cameraPose);
+   MeshManager(vector3 _cameraPos, quaternion _cameraQuat);
    ~MeshManager();
 
    void ShadeMesh(std::vector<triple>& _mesh);
@@ -35,10 +36,11 @@ public:
    bool InView(triple tri);
    bool LoadMesh(std::string fileName);
 
-   void Update(std::vector<vector3> cameraPose);
+   void Update(vector3 _cameraPos, quaternion _cameraQuat);
    void Render();
 
-   void TransformMesh(bool translate, bool rotate);
+   void TransformMesh();
+   vector3 GetCenter(std::vector<triple> _mesh);
 
 private:
    Raster rasterer;
@@ -48,14 +50,13 @@ private:
    std::vector<triple> activeMesh;
    std::vector<std::vector<triple>> worldMeshes;
    std::vector<std::vector<triple>> screenMeshes;
+   std::vector<vector3> screenMeshCenters;
    std::vector<const char*> meshNames;
    std::vector<vector3> meshCenters;
    float zFar = (float)Engine::SCREEN_DEPTH;
    float zNear = 1.0f;
 
    vector3 cameraPos;
-   vector3 cameraAng;
-   vector3 cameraPosDiff;
-   vector3 cameraAngDiff;
+   quaternion cameraQuat;
 };
 #endif

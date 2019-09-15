@@ -13,6 +13,7 @@ public:
    ~triple();
 
    void UpdateCenter();
+   triple& operator=(const triple& other);
    triple operator+(const vector3& other);
    triple operator-(const vector3& other);
    triple operator*(const vector3& other);

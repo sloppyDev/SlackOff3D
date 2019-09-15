@@ -5,6 +5,7 @@
 #include "../IO/Keyboard.h"
 #include "../Math/vector3.h"
 #include "../Math/Rotation.h"
+#include "../Math/quaternion.h"
 
 #include <vector>
 
@@ -22,11 +23,13 @@ public:
    void HandleInputs();
    void Translate(int axis, float magnitude);
    void Rotate(int axis, float deg);
-   std::vector<vector3> GetPose();
+   vector3 GetPos();
+   quaternion GetQuat();
 
 private:
    vector3 pos;
-   vector3 ang;
+   vector3 lastPos;
+   quaternion quat;
    vector3 transRate;
    vector3 rotRate;
 

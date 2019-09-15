@@ -11,14 +11,14 @@ int main()
    Engine engine;
    engine.Initialize();
    CameraManager cameraManager;
-   MeshManager meshManager(cameraManager.GetPose());
+   MeshManager meshManager(cameraManager.GetPos(), cameraManager.GetQuat());
 
 
    while (true)
    {
       engine.Update();
       cameraManager.Update();
-      meshManager.Update(cameraManager.GetPose());
+      meshManager.Update(cameraManager.GetPos(), cameraManager.GetQuat());
 
       engine.BeginRender();
       meshManager.Render();

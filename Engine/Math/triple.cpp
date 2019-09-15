@@ -50,6 +50,17 @@ void triple::UpdateCenter()
    center = vector3((p1.x + p2.x + p3.x) / 3, (p1.y + p2.y + p3.y) / 3, (p1.z + p2.z + p3.z) / 3);
 }
 
+triple& triple::operator=(const triple& other)
+{
+   p1 = other.p1;
+   p2 = other.p2;
+   p3 = other.p3;
+   center = other.center;
+   color = other.color;
+
+   return *this;
+}
+
 triple triple::operator+(const vector3& other)
 {
    triple newTri;
@@ -58,7 +69,7 @@ triple triple::operator+(const vector3& other)
    newTri.p2 = p2 + other;
    newTri.p3 = p3 + other;
    newTri.center = center + other;
-   newTri.color = this->color;
+   newTri.color = color;
 
    return newTri;
 }
@@ -71,7 +82,7 @@ triple triple::operator-(const vector3& other)
    newTri.p2 = p2 - other;
    newTri.p3 = p3 - other;
    newTri.center = center - other;
-   newTri.color = this->color;
+   newTri.color = color;
 
    return newTri;
 }
@@ -84,7 +95,7 @@ triple triple::operator*(const vector3& other)
    newTri.p2 = p2 * other;
    newTri.p3 = p3 * other;
    newTri.UpdateCenter();
-   newTri.color = this->color;
+   newTri.color = color;
 
    return newTri;
 }
@@ -97,7 +108,7 @@ triple triple::operator/(const vector3& other)
    newTri.p2 = p2 / other;
    newTri.p3 = p3 / other;
    newTri.UpdateCenter();
-   newTri.color = this->color;
+   newTri.color = color;
 
    return newTri;
 }

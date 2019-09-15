@@ -1,7 +1,16 @@
 ﻿  CameraManager.cpp
-  MeshManager.cpp
+  quaternion.cpp
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(17,11): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(19,23): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(66,13): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(67,13): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(68,13): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(69,13): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(85,39): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(86,37): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Joe\source\repos\SlackOff3D\Engine\Math\quaternion.cpp(87,39): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  10 of 575 functions ( 1.7%) were compiled, the rest were copied from previous compilation.
+  3 of 577 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

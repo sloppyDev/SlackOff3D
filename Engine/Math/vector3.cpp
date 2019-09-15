@@ -50,7 +50,7 @@ vector3 vector3::Cross(vector3 a, vector3 b)
    float s2 = a.z * b.x - a.x * b.z;
    float s3 = a.x * b.y - a.y * b.x;
 
-   return Normalize(vector3(s1, s2, s3));
+   return vector3(s1, s2, s3);
 }
 
 vector3 vector3::Project(vector3 a, vector3 b)
@@ -67,8 +67,23 @@ float vector3::Magnitude(vector3 in)
 
 vector3 vector3::Normalize(vector3 in)
 {
-   vector3 newVec = in / Magnitude(in);
+   float mag = Magnitude(in);
+   vector3 newVec;
+   if (mag == 0)
+   {
+      newVec = in;
+   }
+   else
+   {
+      newVec = in / mag;
+   }
+
    return newVec;
+}
+
+void vector3::Normalize()
+{
+   *this = *this / Magnitude(*this);
 }
 
 // Operators

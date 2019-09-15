@@ -43,6 +43,50 @@ vector3 Rotation::Rotate(vector3 vec, vector3 angVec)
 
    return rotVec;
 }
+
+vector3 Rotation::Rotate(vector3 vec, quaternion quat, int mode) // mode == 0 -> standard, mode == 1 -> inverse
+{
+   vector3 rotVec;
+
+   if (mode == 1)
+   {
+      quat.Conjugate();
+   }
+
+   float m11 = 2 * quat.r * quat.r + 2 * quat.v.x * quat.v.x - 1;
+   float m12 = 2 * quat.v.x * quat.v.y - 2 * quat.r * quat.v.z;
+   float m13 = 2 * quat.v.x * quat.v.z + 2 * quat.r * quat.v.y;
+
+   float m21 = 2 * quat.v.x * quat.v.y + 2 * quat.r * quat.v.z;
+   float m22 = 2 * quat.r * quat.r + 2 * quat.v.y * quat.v.y - 1;
+   float m23 = 2 * quat.v.y * quat.v.z - 2 * quat.r * quat.v.x;
+
+   float m31 = 2 * quat.v.x * quat.v.z - 2 * quat.r * quat.v.y;
+   float m32 = 2 * quat.v.y * quat.v.z + 2 * quat.r * quat.v.x;
+   float m33 = 2 * quat.r * quat.r + 2 * quat.v.z * quat.v.z - 1;
+
+   matrix3 Q(vector3(m11, m12, m13), vector3(m21, m22, m23), vector3(m31, m32, m33));
+
+   rotVec = Q * vec;
+
+   return rotVec;
+}
+
+triple Rotation::Rotate(triple tri, quaternion quat, int mode) // mode == 0 -> leave r, mode == 1 -> r = r*-1
+{
+   vector3 rotP1;
+   vector3 rotP2;
+   vector3 rotP3;
+
+   rotP1 = Rotate(tri.p1, quat, mode);
+   rotP2 = Rotate(tri.p2, quat, mode);
+   rotP3 = Rotate(tri.p3, quat, mode);
+
+   triple newTri(rotP1, rotP2, rotP3);
+
+   return newTri;
+}
+
 vector3 Rotation::Rotate(vector3 vec, unsigned int axis, float angle)
 {
    float rad = DegToRad(angle);
