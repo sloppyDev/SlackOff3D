@@ -37,11 +37,6 @@ CameraManager::~CameraManager()
 void CameraManager::Update()
 {
    HandleInputs();
-
-   //std::cout << "\rPOS: X: " << pos.x - lastPos.x << ", Y: " << pos.y - lastPos.y << ", Z: " << pos.z - lastPos.z << "                                                   ";
-   std::cout << "\rPOS: X: " << pos.x << ", Y: " << pos.y << ", Z: " << pos.z << "                                                  " << std::endl;
-   std::cout << "QUAT: R: " << quat.r << ", X: " << quat.v.x << ", Y: " << quat.v.y << ", Z: " << quat.v.z << "                                             " << "\x1b[A";
-   lastPos = pos;
 }
 
 void CameraManager::HandleInputs()

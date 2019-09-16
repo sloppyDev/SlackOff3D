@@ -35,6 +35,7 @@ public:
    vector3 ComputeNormal(triple tri);
    bool InView(triple tri);
    bool LoadMesh(std::string fileName);
+   std::vector<triple> DepthClipMesh(std::vector<triple> _mesh);
 
    void Update(vector3 _cameraPos, quaternion _cameraQuat);
    void Render();
@@ -54,7 +55,7 @@ private:
    std::vector<const char*> meshNames;
    std::vector<vector3> meshCenters;
    float zFar = (float)Engine::SCREEN_DEPTH;
-   float zNear = 1.0f;
+   float zNear = 100.0f;
 
    vector3 cameraPos;
    quaternion cameraQuat;

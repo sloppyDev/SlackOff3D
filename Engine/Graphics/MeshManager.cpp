@@ -13,9 +13,9 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    cameraPos = _cameraPos;
    cameraQuat = _cameraQuat;
 
-   //LoadMesh("C:/Users/Joe/Desktop/weirdSpire.obj");
-   //ScaleMesh(meshNames[0], 10.0f);
-   //TranslateBy(meshNames[0], vector3(0.0f, 0.0f, -300.0f));
+   LoadMesh("C:/Users/Joe/Desktop/weirdSpire.obj");
+   ScaleMesh(meshNames[0], 10.0f);
+   TranslateBy(meshNames[0], vector3(0.0f, 0.0f, 300.0f));
 
       
    Raster rasterer;
@@ -30,79 +30,79 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    vector3 leftColor = vector3(0.0f, 0.0f, 1.0f); // blue
    vector3 topColor = vector3(1.0f, 0.0f, 1.0f); // pink
    
-   // Front 1
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(0.0f, sideLength, 0.0f);
-   set3 = vector3(sideLength, sideLength, 0.0f);
-   AddTri(triple(set1, set2, set3, frontColor));
+   //// Front 1
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(0.0f, sideLength, 0.0f);
+   //set3 = vector3(sideLength, sideLength, 0.0f);
+   //AddTri(triple(set1, set2, set3, frontColor));
 
-   // Front 2
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(sideLength, sideLength, 0.0f);
-   set3 = vector3(sideLength, 0.0f, 0.0f);
-   AddTri(triple(set1, set2, set3, frontColor));
+   //// Front 2
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, sideLength, 0.0f);
+   //set3 = vector3(sideLength, 0.0f, 0.0f);
+   //AddTri(triple(set1, set2, set3, frontColor));
 
-   // Right 1
-   set1 = vector3(sideLength, 0.0f, 0.0f);
-   set2 = vector3(sideLength, sideLength, 0.0f);
-   set3 = vector3(sideLength, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, rightColor));
+   //// Right 1
+   //set1 = vector3(sideLength, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, sideLength, 0.0f);
+   //set3 = vector3(sideLength, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, rightColor));
 
-   // Right 2
-   set1 = vector3(sideLength, 0.0f, 0.0f);
-   set2 = vector3(sideLength, sideLength, sideLength);
-   set3 = vector3(sideLength, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, rightColor));
+   //// Right 2
+   //set1 = vector3(sideLength, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, sideLength, sideLength);
+   //set3 = vector3(sideLength, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, rightColor));
 
-   // Back 1
-   set1 = vector3(sideLength, 0.0f, sideLength);
-   set2 = vector3(sideLength, sideLength, sideLength);
-   set3 = vector3(0.0f, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, backColor));
+   //// Back 1
+   //set1 = vector3(sideLength, 0.0f, sideLength);
+   //set2 = vector3(sideLength, sideLength, sideLength);
+   //set3 = vector3(0.0f, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, backColor));
 
-   // Back 2
-   set1 = vector3(0.0f, 0.0f, sideLength);
-   set2 = vector3(sideLength, sideLength, sideLength);
-   set3 = vector3(0.0f, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, backColor));
+   //// Back 2
+   //set1 = vector3(0.0f, 0.0f, sideLength);
+   //set2 = vector3(sideLength, sideLength, sideLength);
+   //set3 = vector3(0.0f, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, backColor));
 
-   // Bottom 1
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(sideLength, 0.0f, 0.0f);
-   set3 = vector3(0.0f, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, bottomColor));
+   //// Bottom 1
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, 0.0f, 0.0f);
+   //set3 = vector3(0.0f, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, bottomColor));
 
-   // Bottom 2
-   set1 = vector3(sideLength, 0.0f, 0.0f);
-   set2 = vector3(sideLength, 0.0f, sideLength);
-   set3 = vector3(0.0f, 0.0f, sideLength);
-   AddTri(triple(set1, set2, set3, bottomColor));
+   //// Bottom 2
+   //set1 = vector3(sideLength, 0.0f, 0.0f);
+   //set2 = vector3(sideLength, 0.0f, sideLength);
+   //set3 = vector3(0.0f, 0.0f, sideLength);
+   //AddTri(triple(set1, set2, set3, bottomColor));
 
-   // Left 1
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(0.0f, sideLength, sideLength);
-   set3 = vector3(0.0f, sideLength, 0.0f);
-   AddTri(triple(set1, set2, set3, leftColor));
+   //// Left 1
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(0.0f, sideLength, sideLength);
+   //set3 = vector3(0.0f, sideLength, 0.0f);
+   //AddTri(triple(set1, set2, set3, leftColor));
 
-   // Left 2
-   set1 = vector3(0.0f, 0.0f, 0.0f);
-   set2 = vector3(0.0f, 0.0f, sideLength);
-   set3 = vector3(0.0f, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, leftColor));
+   //// Left 2
+   //set1 = vector3(0.0f, 0.0f, 0.0f);
+   //set2 = vector3(0.0f, 0.0f, sideLength);
+   //set3 = vector3(0.0f, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, leftColor));
 
-   // Top 1
-   set1 = vector3(0.0f, sideLength, 0.0f);
-   set2 = vector3(0.0f, sideLength, sideLength);
-   set3 = vector3(sideLength, sideLength, 0.0f);
-   AddTri(triple(set1, set2, set3, topColor));
+   //// Top 1
+   //set1 = vector3(0.0f, sideLength, 0.0f);
+   //set2 = vector3(0.0f, sideLength, sideLength);
+   //set3 = vector3(sideLength, sideLength, 0.0f);
+   //AddTri(triple(set1, set2, set3, topColor));
 
-   // Top 2
-   set1 = vector3(sideLength, sideLength, 0.0f);
-   set2 = vector3(0.0f, sideLength, sideLength);
-   set3 = vector3(sideLength, sideLength, sideLength);
-   AddTri(triple(set1, set2, set3, topColor));
-   AddMesh("cube");
-   TranslateBy("cube", vector3(-sideLength / 2, -sideLength / 2, 100.0f));
+   //// Top 2
+   //set1 = vector3(sideLength, sideLength, 0.0f);
+   //set2 = vector3(0.0f, sideLength, sideLength);
+   //set3 = vector3(sideLength, sideLength, sideLength);
+   //AddTri(triple(set1, set2, set3, topColor));
+   //AddMesh("cube");
+   //TranslateBy("cube", vector3(-sideLength / 2, -sideLength / 2, 100.0f));
 
 
 
@@ -180,7 +180,7 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    //set3 = vector3(sideLength, sideLength, sideLength);
    //AddTri(triple(set1, set2, set3, topColor));
    //AddMesh("cube2");
-   //TranslateBy("cube2", vector3(-sideLength / 2, -sideLength / 2, -300.0f));
+   //TranslateBy("cube2", vector3(-sideLength / 2, -sideLength / 2, 300.0f));
 
 
 
@@ -258,7 +258,7 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    //set3 = vector3(sideLength, sideLength, sideLength);
    //AddTri(triple(set1, set2, set3, topColor));
    //AddMesh("cube3");
-   //TranslateBy("cube3", vector3(-sideLength / 2, -sideLength / 2, -100.0f));
+   //TranslateBy("cube3", vector3(-sideLength / 2, -sideLength / 2, 100.0f));
 
 
 
@@ -278,7 +278,7 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    //AddMesh("triangleFlatBottom");
    //TranslateBy("triangleFlatBottom", vector3(-sideLength / 2, -sideLength / 2, 300.0f));
 
-   //// Pointy Top Triangle
+   // Pointy Top Triangle
    //set1 = vector3(0.0f, 0.0f, 0.0f);
    //set2 = vector3(sideLength/2, sideLength, 0.0f);
    //set3 = vector3(sideLength, 0.0f, 0.0f);
@@ -587,7 +587,7 @@ vector3 MeshManager::ComputeNormal(triple tri)
 bool MeshManager::InView(triple tri)
 {
    vector3 normal = ComputeNormal(tri);
-   vector3 cameraLine = vector3::Normalize(tri.center - cameraPos);
+   vector3 cameraLine = vector3::Normalize(tri.center);
    if (vector3::Dot(cameraLine, normal) < 0)
    {
       return true;
@@ -601,12 +601,165 @@ void MeshManager::ShadeMesh(std::vector<triple>& _mesh)
    for (auto&& tri : _mesh)
    {
       vector3 normal = ComputeNormal(tri);
-      vector3 lightLine = vector3::Normalize(tri.center - cameraPos);
+      vector3 lightLine = vector3::Normalize(tri.center);
       
       luminance = -vector3::Dot(normal, lightLine)*10;
       tri.color = vector3(luminance);
    }
 }
+
+std::vector<triple> MeshManager::DepthClipMesh(std::vector<triple> _mesh)
+{
+   std::vector<triple> clippedMesh;
+   float signSum{};
+   triple clippedTri1;
+   triple clippedTri2;
+   vector3 zNorm(0.0f, 0.0f, 1.0f);
+   vector3 zPoint(0.0f, 0.0f, zNear);
+
+   for (auto&& tri : _mesh)
+   {
+      float zCheckP1 = tri.p1.z - zNorm.z;
+      float zCheckP2 = tri.p2.z - zNorm.z;
+      float zCheckP3 = tri.p3.z - zNorm.z;
+      float zCheckP1Sign = (zCheckP1 / abs(zCheckP1));
+      float zCheckP2Sign = (zCheckP2 / abs(zCheckP2));
+      float zCheckP3Sign = (zCheckP3 / abs(zCheckP3));
+
+      signSum = zCheckP1Sign + zCheckP2Sign + zCheckP3Sign;
+
+      if (signSum == 3)
+      {
+         clippedMesh.push_back(tri);
+      }
+      else if (signSum > -3 && signSum < 3)
+      {
+         if (zCheckP1Sign > 0)
+         {
+            if (zCheckP2Sign < 0 && zCheckP3Sign < 0) // 2 New Points from P1
+            {
+               clippedTri1.p1 = tri.p1;
+
+               // P1 to P2
+               vector3 lineVec = (tri.p2 - tri.p1);
+               lineVec.Normalize();
+
+               float lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p2 = lineVec * lineProportion + tri.p1;
+
+               // P1 to P3
+               lineVec = (tri.p3 - tri.p1);
+               lineVec.Normalize();
+
+               lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p3 = lineVec * lineProportion + tri.p1;
+               clippedMesh.push_back(clippedTri1);
+            }
+            else if (zCheckP2Sign > 0 && zCheckP3Sign < 0) // 2 New Triangles with P1 and P2
+            {
+               clippedTri1.p1 = tri.p1;
+               clippedTri1.p2 = tri.p2;
+               clippedTri2.p1 = tri.p1;
+
+               // P2 to NewTri1P3
+               vector3 lineVec = (tri.p2 - tri.p1);
+               lineVec.Normalize();
+
+               float lineProportion = (vector3::Dot((zPoint - tri.p2), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p3 = lineVec * lineProportion + tri.p2;
+               clippedTri2.p2 = clippedTri1.p3;
+
+               // P1 to NewTri2P2
+               lineVec = (tri.p3 - tri.p1);
+               lineVec.Normalize();
+
+               lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri2.p3 = lineVec * lineProportion + tri.p1;
+
+               clippedMesh.push_back(clippedTri1);
+               clippedMesh.push_back(clippedTri2);
+            }
+            else if (zCheckP3Sign > 0 && zCheckP2Sign < 0) // 2 New Triangles with P1 and P3
+            {
+               clippedTri1.p1 = tri.p1;
+               clippedTri1.p3 = tri.p3;
+               clippedTri2.p1 = tri.p1;
+
+               // P3 to NewTri1P2
+               vector3 lineVec = (tri.p2 - tri.p3);
+               lineVec.Normalize();
+
+               float lineProportion = (vector3::Dot((zPoint - tri.p3), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p2 = lineVec * lineProportion + tri.p3;
+               clippedTri2.p3 = clippedTri1.p3;
+
+               // P1 to NewTri2P2
+               lineVec = (tri.p2 - tri.p1);
+               lineVec.Normalize();
+
+               lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri2.p2 = lineVec * lineProportion + tri.p1;
+
+               clippedMesh.push_back(clippedTri1);
+               clippedMesh.push_back(clippedTri2);
+            }
+         }
+
+         if (zCheckP2Sign > 0)
+         {
+            if (zCheckP1Sign < 0 && zCheckP3Sign < 0) // 2 New Points from P2
+            {
+               clippedTri1.p2 = tri.p2;
+
+               // P2 to P1
+               vector3 lineVec = (tri.p1 - tri.p2);
+               lineVec.Normalize();
+
+               float lineProportion = (vector3::Dot((zPoint - tri.p2), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p1 = lineVec * lineProportion + tri.p2;
+
+               // P2 to P3
+               lineVec = (tri.p3 - tri.p2);
+               lineVec.Normalize();
+
+               lineProportion = (vector3::Dot((zPoint - tri.p2), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p3 = lineVec * lineProportion + tri.p2;
+               clippedMesh.push_back(clippedTri1);
+            }
+         }
+         if (zCheckP3Sign > 0)
+         {
+            if (zCheckP1Sign < 0 && zCheckP3Sign < 0) // 2 New Points from P3
+            {
+               clippedTri1.p3 = tri.p3;
+
+               // P3 to P1
+               vector3 lineVec = (tri.p1 - tri.p3);
+               lineVec.Normalize();
+
+               float lineProportion = (vector3::Dot((zPoint - tri.p3), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p1 = lineVec * lineProportion + tri.p3;
+
+               // P2 to P3
+               lineVec = (tri.p2 - tri.p3);
+               lineVec.Normalize();
+
+               lineProportion = (vector3::Dot((zPoint - tri.p3), zNorm)) / vector3::Dot(lineVec, zNorm);
+               clippedTri1.p2 = lineVec * lineProportion + tri.p3;
+               clippedMesh.push_back(clippedTri1);
+            }
+         }
+      }
+      else
+      {
+         clippedMesh.push_back(tri);
+      }
+
+   }
+
+   return clippedMesh;
+}
+
 void MeshManager::Update(vector3 _cameraPos, quaternion _cameraQuat)
 {
    cameraPos = _cameraPos;
@@ -649,25 +802,27 @@ void MeshManager::Update(vector3 _cameraPos, quaternion _cameraQuat)
 
 void MeshManager::Render()
 {
+   std::vector<triple> depthClippedMesh;
    std::vector<triple> projectedMesh;
    vector3 projectedCenter;
+   std::vector<triple> clippedMesh;
 
    int count = 0;
    for (auto&& mesh : screenMeshes)
    {
       std::vector<triple> toRender;
+      //depthClippedMesh = DepthClipMesh(mesh);
       projectedMesh = ProjectMesh(mesh);
       projectedCenter = ProjectCenter(meshCenters[count]);
 
       for (auto&& tri : projectedMesh)
       {
-         //if (InView(tri))
-         //{
-         //   toRender.push_back(tri);
-         //}
-         toRender.push_back(tri);
+         if (InView(tri))
+         {
+            toRender.push_back(tri);
+         }
       }
-      //ShadeMesh(toRender);
+      ShadeMesh(toRender);
       
       std::sort(toRender.begin(), toRender.end(), [](triple& tri1, triple& tri2)
          {
@@ -678,17 +833,6 @@ void MeshManager::Render()
       {
          rasterer.DrawTriangle(tri, false);
       }
-      glBegin(GL_LINES);
-      {
-         glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-         glVertex2f(1.0f, 0.0f);
-         glVertex2f(0.0f, 0.0f);
-
-         glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-         glVertex2f(0.0f, 0.0f);
-         glVertex2f(0.0f, 1.0f);
-      }
-      glEnd();
    }
 
 }
