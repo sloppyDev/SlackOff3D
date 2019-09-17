@@ -13,9 +13,9 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    cameraPos = _cameraPos;
    cameraQuat = _cameraQuat;
 
-   LoadMesh("C:/Users/Joe/Desktop/weirdSpire.obj");
-   ScaleMesh(meshNames[0], 10.0f);
-   TranslateBy(meshNames[0], vector3(0.0f, 0.0f, 300.0f));
+   LoadMesh("C:/Users/Joe/Desktop/untitled.obj");
+   //ScaleMesh(meshNames[0], 10.0f);
+   //TranslateBy(meshNames[0], vector3(0.0f, 0.0f, 300.0f));
 
       
    Raster rasterer;
@@ -601,161 +601,151 @@ void MeshManager::ShadeMesh(std::vector<triple>& _mesh)
    for (auto&& tri : _mesh)
    {
       vector3 normal = ComputeNormal(tri);
-      vector3 lightLine = vector3::Normalize(tri.center);
+      vector3 lightLine = vector3::Normalize(tri.center - vector3(0.0f, 3000.0f, 700.0f));
       
       luminance = -vector3::Dot(normal, lightLine)*10;
       tri.color = vector3(luminance);
    }
 }
 
-std::vector<triple> MeshManager::DepthClipMesh(std::vector<triple> _mesh)
+std::vector<triple> MeshManager::Clip(std::vector<triple> _mesh, vector3 planeNorm, vector3 planePoint)
 {
    std::vector<triple> clippedMesh;
    float signSum{};
    triple clippedTri1;
    triple clippedTri2;
-   vector3 zNorm(0.0f, 0.0f, 1.0f);
-   vector3 zPoint(0.0f, 0.0f, zNear);
 
    for (auto&& tri : _mesh)
    {
-      float zCheckP1 = tri.p1.z - zNorm.z;
-      float zCheckP2 = tri.p2.z - zNorm.z;
-      float zCheckP3 = tri.p3.z - zNorm.z;
-      float zCheckP1Sign = (zCheckP1 / abs(zCheckP1));
-      float zCheckP2Sign = (zCheckP2 / abs(zCheckP2));
-      float zCheckP3Sign = (zCheckP3 / abs(zCheckP3));
+      float checkP1 = vector3::Dot(planeNorm, tri.p1 - planePoint);
+      float checkP2 = vector3::Dot(planeNorm, tri.p2 - planePoint);
+      float checkP3 = vector3::Dot(planeNorm, tri.p3 - planePoint);
+      float checkP1Sign = (checkP1 / abs(checkP1));
+      float checkP2Sign = (checkP2 / abs(checkP2));
+      float checkP3Sign = (checkP3 / abs(checkP3));
+      vector<float> checkVec;
+      vector<vector3> pointsVec;
+      checkVec.push_back(checkP1);
+      checkVec.push_back(checkP2);
+      checkVec.push_back(checkP3);
+      pointsVec.push_back(tri.p1);
+      pointsVec.push_back(tri.p2);
+      pointsVec.push_back(tri.p3);
 
-      signSum = zCheckP1Sign + zCheckP2Sign + zCheckP3Sign;
+      signSum = checkP1Sign + checkP2Sign + checkP3Sign;
 
       if (signSum == 3)
       {
          clippedMesh.push_back(tri);
       }
-      else if (signSum > -3 && signSum < 3)
+      else if (signSum == -3)
       {
-         if (zCheckP1Sign > 0)
-         {
-            if (zCheckP2Sign < 0 && zCheckP3Sign < 0) // 2 New Points from P1
-            {
-               clippedTri1.p1 = tri.p1;
 
-               // P1 to P2
-               vector3 lineVec = (tri.p2 - tri.p1);
-               lineVec.Normalize();
-
-               float lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p2 = lineVec * lineProportion + tri.p1;
-
-               // P1 to P3
-               lineVec = (tri.p3 - tri.p1);
-               lineVec.Normalize();
-
-               lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p3 = lineVec * lineProportion + tri.p1;
-               clippedMesh.push_back(clippedTri1);
-            }
-            else if (zCheckP2Sign > 0 && zCheckP3Sign < 0) // 2 New Triangles with P1 and P2
-            {
-               clippedTri1.p1 = tri.p1;
-               clippedTri1.p2 = tri.p2;
-               clippedTri2.p1 = tri.p1;
-
-               // P2 to NewTri1P3
-               vector3 lineVec = (tri.p2 - tri.p1);
-               lineVec.Normalize();
-
-               float lineProportion = (vector3::Dot((zPoint - tri.p2), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p3 = lineVec * lineProportion + tri.p2;
-               clippedTri2.p2 = clippedTri1.p3;
-
-               // P1 to NewTri2P2
-               lineVec = (tri.p3 - tri.p1);
-               lineVec.Normalize();
-
-               lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri2.p3 = lineVec * lineProportion + tri.p1;
-
-               clippedMesh.push_back(clippedTri1);
-               clippedMesh.push_back(clippedTri2);
-            }
-            else if (zCheckP3Sign > 0 && zCheckP2Sign < 0) // 2 New Triangles with P1 and P3
-            {
-               clippedTri1.p1 = tri.p1;
-               clippedTri1.p3 = tri.p3;
-               clippedTri2.p1 = tri.p1;
-
-               // P3 to NewTri1P2
-               vector3 lineVec = (tri.p2 - tri.p3);
-               lineVec.Normalize();
-
-               float lineProportion = (vector3::Dot((zPoint - tri.p3), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p2 = lineVec * lineProportion + tri.p3;
-               clippedTri2.p3 = clippedTri1.p3;
-
-               // P1 to NewTri2P2
-               lineVec = (tri.p2 - tri.p1);
-               lineVec.Normalize();
-
-               lineProportion = (vector3::Dot((zPoint - tri.p1), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri2.p2 = lineVec * lineProportion + tri.p1;
-
-               clippedMesh.push_back(clippedTri1);
-               clippedMesh.push_back(clippedTri2);
-            }
-         }
-
-         if (zCheckP2Sign > 0)
-         {
-            if (zCheckP1Sign < 0 && zCheckP3Sign < 0) // 2 New Points from P2
-            {
-               clippedTri1.p2 = tri.p2;
-
-               // P2 to P1
-               vector3 lineVec = (tri.p1 - tri.p2);
-               lineVec.Normalize();
-
-               float lineProportion = (vector3::Dot((zPoint - tri.p2), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p1 = lineVec * lineProportion + tri.p2;
-
-               // P2 to P3
-               lineVec = (tri.p3 - tri.p2);
-               lineVec.Normalize();
-
-               lineProportion = (vector3::Dot((zPoint - tri.p2), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p3 = lineVec * lineProportion + tri.p2;
-               clippedMesh.push_back(clippedTri1);
-            }
-         }
-         if (zCheckP3Sign > 0)
-         {
-            if (zCheckP1Sign < 0 && zCheckP3Sign < 0) // 2 New Points from P3
-            {
-               clippedTri1.p3 = tri.p3;
-
-               // P3 to P1
-               vector3 lineVec = (tri.p1 - tri.p3);
-               lineVec.Normalize();
-
-               float lineProportion = (vector3::Dot((zPoint - tri.p3), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p1 = lineVec * lineProportion + tri.p3;
-
-               // P2 to P3
-               lineVec = (tri.p2 - tri.p3);
-               lineVec.Normalize();
-
-               lineProportion = (vector3::Dot((zPoint - tri.p3), zNorm)) / vector3::Dot(lineVec, zNorm);
-               clippedTri1.p2 = lineVec * lineProportion + tri.p3;
-               clippedMesh.push_back(clippedTri1);
-            }
-         }
       }
-      else
+      else if (signSum == 1) // Create a Quad
       {
-         clippedMesh.push_back(tri);
-      }
+         int minIdx = min_element(checkVec.begin(), checkVec.end()) - checkVec.begin();
+         vector3 outPoint = pointsVec[minIdx];
+         vector3 t1p1 = pointsVec[(minIdx - 1 + 3) % 3];
+         vector3 t1p2;  // intersect of t1p1 and outpoint with plane
+         vector3 t1p3 = pointsVec[(minIdx + 1) % 3];
+         vector3 t2p1 = t1p3;
+         vector3 t2p2 = t1p2; // intersect of t1p1 and outpoint with plane
+         vector3 t2p3; // intersect of t2p1 and outpoint with plane
 
+         // Triangle 1
+         vector3 lineVec = (outPoint - t1p1);
+         lineVec.Normalize();
+
+         float lineProportion = (vector3::Dot((planePoint - t1p1), planeNorm)) / vector3::Dot(lineVec, planeNorm);
+         t1p2 = lineVec * lineProportion + t1p1;
+         t2p2 = t1p2;
+
+         clippedTri1.p1 = t1p1;
+         clippedTri1.p2 = t1p2;
+         clippedTri1.p3 = t1p3;
+         clippedTri1.UpdateCenter();
+         //clippedTri1.color = vector3(1, 0, 0);
+         clippedTri1.color = tri.color;
+
+         // Triangle 2
+         lineVec = (outPoint - t2p1);
+         lineVec.Normalize();
+
+         lineProportion = (vector3::Dot((planePoint - t2p1), planeNorm)) / vector3::Dot(lineVec, planeNorm);
+         t2p3 = lineVec * lineProportion + t2p1;
+
+         clippedTri2.p1 = t2p1;
+         clippedTri2.p2 = t2p2;
+         clippedTri2.p3 = t2p3;
+         clippedTri2.UpdateCenter();
+         //clippedTri2.color = vector3(0, 1, 0);
+         clippedTri2.color = tri.color;
+         clippedMesh.push_back(clippedTri1);
+         clippedMesh.push_back(clippedTri2);
+      }
+      else // Create single new triangle
+      {
+         int maxIdx = max_element(checkVec.begin(), checkVec.end()) - checkVec.begin();
+         vector3 inPoint = pointsVec[maxIdx];
+         vector3 outPoint1 = pointsVec[(maxIdx + 1) % 3];
+         vector3 outPoint2 = pointsVec[(maxIdx + 2) % 3];
+         vector3 t1p1 = inPoint;
+         vector3 t1p2;  // intersect of t1p1 and outpoint1 with plane
+         vector3 t1p3;  // Intersect of t1p1 and outpoint2 with plan
+
+         // Line 1
+         vector3 lineVec = (outPoint1 - t1p1);
+         lineVec.Normalize();
+
+         float lineProportion = (vector3::Dot((planePoint - t1p1), planeNorm)) / vector3::Dot(lineVec, planeNorm);
+         t1p2 = lineVec * lineProportion + t1p1;
+
+         // Line 2
+         lineVec = (outPoint2 - t1p1);
+         lineVec.Normalize();
+
+         lineProportion = (vector3::Dot((planePoint - t1p1), planeNorm)) / vector3::Dot(lineVec, planeNorm);
+         t1p3 = lineVec * lineProportion + t1p1;
+
+         clippedTri1.p1 = t1p1;
+         clippedTri1.p2 = t1p2;
+         clippedTri1.p3 = t1p3;
+         clippedTri1.UpdateCenter();
+         //clippedTri1.color = vector3(0, 0, 1);
+         clippedTri1.color = tri.color;
+
+         clippedMesh.push_back(clippedTri1);
+      }
    }
+   return clippedMesh;
+}
+
+std::vector<triple> MeshManager::DepthClipMesh(std::vector<triple> _mesh)
+{
+   vector3 zPlaneNorm(0.0f, 0.0f, 1.0f);
+   vector3 zPoint(0.0f, 0.0f, zNear);
+
+   std::vector<triple> clippedMesh = Clip(_mesh, zPlaneNorm, zPoint);
+   return clippedMesh;
+}
+
+std::vector<triple> MeshManager::ClipMesh(std::vector<triple> _mesh)
+{
+   vector3 rightPlaneNorm(-1.0f, 0.0f, 0.0f);
+   vector3 topPlaneNorm(0.0f, -1.0f, 0.0f);
+   vector3 leftPlaneNorm(1.0f, 0.0f, 0.0f);
+   vector3 bottomPlaneNorm(0.0f, 1.0f, 0.0f);
+
+   vector3 rightPlanePoint(1.0f, 0.0f, 0.0f);
+   vector3 topPlanePoint(0.0f, 1.0f, 0.0f);
+   vector3 leftPlanePoint(-1.0f, 0.0f, 0.0f);
+   vector3 bottomPlanePoint(0.0f, -1.0f, 0.0f);
+
+   std::vector<triple> clippedMesh = Clip(_mesh, rightPlaneNorm, rightPlanePoint); // Right Plane
+   clippedMesh = Clip(clippedMesh, topPlaneNorm, topPlanePoint); // Top Plane
+   clippedMesh = Clip(clippedMesh, leftPlaneNorm, leftPlanePoint); // Left Plane
+   clippedMesh = Clip(clippedMesh, bottomPlaneNorm, bottomPlanePoint); // Bottom Plane
 
    return clippedMesh;
 }
@@ -768,11 +758,11 @@ void MeshManager::Update(vector3 _cameraPos, quaternion _cameraQuat)
    TransformMesh();
    vector3 meshCenter = GetCenter(screenMeshes[0]);
 
-   std::cout << "\rPOS: X: " << cameraPos.x << ", Y: " << cameraPos.y << ", Z: " << cameraPos.z << "                                                  " << std::endl;
+   /*std::cout << "\rPOS: X: " << cameraPos.x << ", Y: " << cameraPos.y << ", Z: " << cameraPos.z << "                                                  " << std::endl;
    std::cout << "WORLD SPACE MESH CENTER: X: " << meshCenters[0].x << ", Y: " << meshCenters[0].y << ", Z: " << meshCenters[0].z << "                                                 " << std::endl;
    std::cout << "SCREEN SPACE MESH CENTER: X: " << meshCenter.x << ", Y: " << meshCenter.y << ", Z: " << meshCenter.z << "                                                 " << std::endl;
    std::cout << "QUAT: R: " << cameraQuat.r << ", X: " << cameraQuat.v.x << ", Y: " << cameraQuat.v.y << ", Z: " << cameraQuat.v.z << "                                             " << "\x1b[A\x1b[A\x1b[A";
-
+*/
 
 
    //vector3 angVel = vector3(20.0f, 20.0f, -20.0f);
@@ -804,25 +794,24 @@ void MeshManager::Render()
 {
    std::vector<triple> depthClippedMesh;
    std::vector<triple> projectedMesh;
-   vector3 projectedCenter;
    std::vector<triple> clippedMesh;
 
    int count = 0;
    for (auto&& mesh : screenMeshes)
    {
       std::vector<triple> toRender;
-      //depthClippedMesh = DepthClipMesh(mesh);
-      projectedMesh = ProjectMesh(mesh);
-      projectedCenter = ProjectCenter(meshCenters[count]);
+      depthClippedMesh = DepthClipMesh(mesh);
+      projectedMesh = ProjectMesh(depthClippedMesh);
+      clippedMesh = ClipMesh(projectedMesh);
 
-      for (auto&& tri : projectedMesh)
+      for (auto&& tri : clippedMesh)
       {
          if (InView(tri))
          {
             toRender.push_back(tri);
          }
       }
-      ShadeMesh(toRender);
+      //ShadeMesh(toRender);
       
       std::sort(toRender.begin(), toRender.end(), [](triple& tri1, triple& tri2)
          {
@@ -831,7 +820,7 @@ void MeshManager::Render()
 
       for (auto&& tri : toRender)
       {
-         rasterer.DrawTriangle(tri, false);
+         rasterer.DrawTriangle(tri, true);
       }
    }
 
