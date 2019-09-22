@@ -2,9 +2,9 @@
 
 CameraManager::CameraManager()
 {
-   pos = vector3(0.0f, 3000.0f, 700.0f);
+   pos = vector3(0.0f, 0.0f, -1.0f);
    quat = quaternion(0.0f, vector3(0.0f, 1.0f, 0.0f));
-   transRate = vector3(400.0f);
+   transRate = vector3(10.0f);
    rotRate = vector3(100.0f);
 }
 

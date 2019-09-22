@@ -6,7 +6,7 @@ using namespace std;
 const char* Engine::GAME_NAME{ "SlackOff3D" };
 int Engine::SCREEN_WIDTH{ 1024 };
 int Engine::SCREEN_HEIGHT{ 768 };
-int Engine::SCREEN_DEPTH{ 1000 };
+int Engine::SCREEN_DEPTH{ 10 };
 float Engine::ASPECT_RATIO{ (float)Engine::SCREEN_WIDTH / (float)Engine::SCREEN_HEIGHT };
 float Engine::FOV{ 90 };
 float Engine::dt{ 0 };

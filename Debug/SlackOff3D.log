@@ -1,3 +1,4 @@
-﻿  MeshManager.cpp
-C:\Users\Joe\source\repos\SlackOff3D\Engine\Graphics\MeshManager.cpp(361): warning C4715:  'MeshManager::LoadMesh': not all control paths return a value
+﻿  CameraManager.cpp
+  testSlackOff3d.cpp
+  Generating Code...
   SlackOff3D.vcxproj -> C:\Users\Joe\source\repos\SlackOff3D\Debug\SlackOff3D.exe

@@ -3,22 +3,31 @@
 
 #include <math.h>
 
-using namespace std;
-
-vector3 MeshManager::ASPECT_VEC = vector3(1.0f, (float)Engine::ASPECT_RATIO, 1.0f);
-vector3 MeshManager::SCALE_VEC = vector3((float)Engine::SCREEN_WIDTH, (float)Engine::SCREEN_WIDTH, (float)Engine::SCREEN_WIDTH);
-
-MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
+MeshManager::MeshManager(std::vector<std::string> meshPaths, vector3 _cameraPos, quaternion _cameraQuat)
 {
+   // Instantiating member classes and variables
+   depthClippedMesh.name = "depthClipped";
+   projectedMesh.name = "projected";
+   clippedMesh.name = "clipped";
+   renderMesh.name = "render";
+
+   activeMeshIndex = { 0 };
+
+   // Loading meshes
+   for (auto&& path : meshPaths)
+   {
+      Mesh mesh(path);
+      worldMeshes.push_back(mesh);
+      screenMeshes.push_back(mesh);
+   }
+
    cameraPos = _cameraPos;
    cameraQuat = _cameraQuat;
 
-   LoadMesh("C:/Users/Joe/Desktop/untitled.obj");
-   //ScaleMesh(meshNames[0], 10.0f);
-   //TranslateBy(meshNames[0], vector3(0.0f, 0.0f, 300.0f));
 
-      
-   Raster rasterer;
+   //worldMeshes[0].Scale(10.0f);
+   worldMeshes[0].Translate(vector3(0.0f, 0.0f, 300.0f));
+
    float sideLength = 50.0f;
    vector3 set1 = vector3();
    vector3 set2 = vector3();
@@ -309,64 +318,11 @@ MeshManager::MeshManager(vector3 _cameraPos, quaternion _cameraQuat)
    //AddTri(triple(set1, set2, set3, topColor));
    //AddMesh("triangleWeirdPoint");
    //TranslateBy("triangleWeirdPoint", vector3((-sideLength / 2) - 100.0f, (-sideLength / 2) + 100.0f, 300.0f));
-
-   TransformMesh();
 }
 
 MeshManager::~MeshManager()
 {
 
-}
-
-bool MeshManager::LoadMesh(std::string fileName)
-{
-   std::ifstream f(fileName);
-   if (!f.is_open())
-   {
-      return false;
-   }
-   
-   std::vector<vector3> verts;
-
-   while (!f.eof())
-   {
-      char line[128];
-      f.getline(line, 128);
-
-      std::stringstream ss;
-      ss << line;
-
-      char temp;
-
-      if (line[0] == 'v')
-      {
-         vector3 v;
-         ss >> temp >> v.x >> v.y >> v.z;
-         verts.push_back(v);
-      }
-
-      if (line[0] == 'f')
-      {
-         int f[3];
-         ss >> temp >> f[0] >> f[1] >> f[2];
-         AddTri(triple(verts[f[0]-1], verts[f[1]-1], verts[f[2]-1]));
-      }
-   }
-
-   fileName.pop_back();
-   fileName.pop_back();
-   fileName.pop_back();
-   const char* meshName = fileName.c_str();
-   AddMesh(meshName);
-}
-
-void MeshManager::AddMesh(const char* meshName)
-{
-   worldMeshes.push_back(activeMesh);
-   meshNames.push_back(meshName);
-   meshCenters.push_back(vector3());
-   UpdateCenter(meshName);
-   activeMesh.clear();
 }
 
 vector3 MeshManager::GetCenter(std::vector<triple> _mesh)
@@ -391,87 +347,6 @@ vector3 MeshManager::GetCenter(std::vector<triple> _mesh)
    return vector3(xAve, yAve, zAve);
 }
 
-void MeshManager::UpdateCenter(const char* meshName)
-{
-   float xAve{ 0.0f };
-   float yAve{ 0.0f };
-   float zAve{ 0.0f };
-   int numTri{ 0 };
-
-   vector<triple>* mesh = NULL;
-   mesh = &GetMesh(meshName);
-   for (auto&& tri : *mesh)
-   {
-      xAve += tri.center.x;
-      yAve += tri.center.y;
-      zAve += tri.center.z;
-      numTri++;
-   }
-   xAve /= (float)numTri;
-   yAve /= (float)numTri;
-   zAve /= (float)numTri;
-
-   GetCenter(meshName) = vector3(xAve, yAve, zAve);
-}
-
-vector<triple>& MeshManager::GetMesh(const char* meshName)
-{
-   unsigned int IDX{ 0 };
-   for (auto i = 0; meshNames.size(); ++i)
-   {
-      if (meshNames[i] == meshName)
-      {
-         IDX = i;
-         break;
-      }
-   }
-   if (IDX < meshNames.size())
-   {
-      return worldMeshes[IDX];
-   }
-   else
-   {
-      return worldMeshes[0];
-   }
-}
-
-vector3& MeshManager::GetCenter(const char* meshName)
-{
-   unsigned int IDX{ 0 };
-   for (auto i = 0; meshNames.size(); ++i)
-   {
-      if (meshNames[i] == meshName)
-      {
-         IDX = i;
-         break;
-      }
-   }
-   if (IDX < meshNames.size())
-   {
-      return meshCenters[IDX];
-   }
-   else
-   {
-      return meshCenters[0];
-   }
-}
-
-void MeshManager::AddTri(triple in)          
-{
-   activeMesh.push_back(in);
-}
-
-void MeshManager::TranslateBy(const char* meshName, vector3 translateVec)
-{
-   vector<triple>* mesh = NULL;
-   mesh = &GetMesh(meshName);
-   for (auto&& tri : *mesh)
-   {
-      tri = tri + translateVec;
-   }
-   UpdateCenter(meshName);
-}
-
 vector3 MeshManager::ProjectCenter(vector3 center)
 {
    vector3 projectedCenter;
@@ -487,92 +362,10 @@ vector3 MeshManager::ProjectCenter(vector3 center)
    return projectedCenter;
 }
 
-std::vector<triple> MeshManager::ProjectMesh(vector<triple> _mesh)
-{
-   std::vector<triple> projectedMesh;
-   float x{};
-   float y{};
-   float z{};
 
-   for (auto&& tri : _mesh)
-   {
-      float fFov = 1 / tan(Rotation::DegToRad(Engine::FOV) / 2);
-      triple projectedTri;
-      // P1
-      x = tri.p1.x;
-      y = tri.p1.y;
-      z = tri.p1.z;
-      x = x * (fFov / z);
-      y = Engine::ASPECT_RATIO * y * (fFov / z);
-      z = z * (-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
-      projectedTri.p1 = vector3(x, y, z);
 
-      // P2
-      x = tri.p2.x;
-      y = tri.p2.y;
-      z = tri.p2.z;
-      x = x*(fFov / z);
-      y = Engine::ASPECT_RATIO * y*(fFov / z);
-      z = z*(-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
-      projectedTri.p2 = vector3(x, y, z);
 
-      // P3
-      x = tri.p3.x;
-      y = tri.p3.y;
-      z = tri.p3.z;
-      x = x*(fFov / z);
-      y = Engine::ASPECT_RATIO * y * (fFov / z);
-      z = z*(-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
-      projectedTri.p3 = vector3(x, y, z);
-      projectedTri.UpdateCenter();
-      projectedTri.color = tri.color;
-      projectedMesh.push_back(projectedTri);
-   }
-   return projectedMesh;
-}
 
-std::vector<triple> MeshManager::ScaleMesh(vector<triple> _mesh, float mult)
-{
-   std::vector<triple> scaledMesh;
-
-   for (auto&& tri : _mesh)
-   {
-      scaledMesh.push_back(tri*mult);
-   }
-   return scaledMesh;
-}
-
-void MeshManager::ScaleMesh(const char* meshName, float mult)
-{
-   for (auto&& tri : GetMesh(meshName))
-   {
-      tri = tri * mult;
-   }
-   UpdateCenter(meshName);
-}
-void MeshManager::RotateBy(const char* meshName, vector3 rotVec)
-{
-   for (auto&& tri : GetMesh(meshName))
-   {
-      tri = Rotation::Rotate(tri, 1, rotVec.x);
-      tri = Rotation::Rotate(tri, 2, rotVec.y);
-      tri = Rotation::Rotate(tri, 3, rotVec.z);
-   }
-   UpdateCenter(meshName);
-}
-
-void MeshManager::RotateBy(const char* meshName, vector3 rotVec, vector3 rotPoint)
-{
-   vector<triple>* mesh = NULL;
-   mesh = &GetMesh(meshName);
-   for (auto&& tri : *mesh)
-   {
-      tri = Rotation::Rotate(tri, 1, rotVec.x, rotPoint);
-      tri = Rotation::Rotate(tri, 2, rotVec.y, rotPoint);
-      tri = Rotation::Rotate(tri, 3, rotVec.z, rotPoint);
-   }
-   UpdateCenter(meshName);
-}
 
 vector3 MeshManager::ComputeNormal(triple tri)
 {
@@ -608,23 +401,109 @@ void MeshManager::ShadeMesh(std::vector<triple>& _mesh)
    }
 }
 
-std::vector<triple> MeshManager::Clip(std::vector<triple> _mesh, vector3 planeNorm, vector3 planePoint)
+void MeshManager::TransformMesh()
 {
-   std::vector<triple> clippedMesh;
-   float signSum{};
-   triple clippedTri1;
-   triple clippedTri2;
-
-   for (auto&& tri : _mesh)
+   for (auto&& tri : worldMeshes[activeMeshIndex].tris)
    {
+      triple screenTri;
+
+      screenTri = tri - cameraPos;
+      screenTri = Rotation::Rotate(screenTri, cameraQuat, 1);
+
+      screenTri.color = tri.color;
+      screenTri.UpdateCenter();
+      screenMeshes[activeMeshIndex].tris.push_back(screenTri);
+   }
+}
+
+void MeshManager::DepthClipMesh()
+{
+   vector3 zPlaneNorm(0.0f, 0.0f, 1.0f);
+   vector3 zPoint(0.0f, 0.0f, zNear);
+
+   Clip(screenMeshes[activeMeshIndex], zPlaneNorm, zPoint, &depthClippedMesh);
+}
+
+void MeshManager::ProjectMesh()
+{
+   float x{};
+   float y{};
+   float z{};
+
+   for (auto&& tri : depthClippedMesh.tris)
+   {
+      float fFov = 1 / tan(Rotation::DegToRad(Engine::FOV) / 2);
+      triple projectedTri;
+      // P1
+      x = tri.p1.x;
+      y = tri.p1.y;
+      z = tri.p1.z;
+      x = x * (fFov / z);
+      y = Engine::ASPECT_RATIO * y * (fFov / z);
+      z = z * (-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
+      projectedTri.p1 = vector3(x, y, z);
+
+      // P2
+      x = tri.p2.x;
+      y = tri.p2.y;
+      z = tri.p2.z;
+      x = x * (fFov / z);
+      y = Engine::ASPECT_RATIO * y * (fFov / z);
+      z = z * (-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
+      projectedTri.p2 = vector3(x, y, z);
+
+      // P3
+      x = tri.p3.x;
+      y = tri.p3.y;
+      z = tri.p3.z;
+      x = x * (fFov / z);
+      y = Engine::ASPECT_RATIO * y * (fFov / z);
+      z = z * (-zFar / (zFar - zNear)) - ((zFar * zNear) / (zFar - zNear));
+      projectedTri.p3 = vector3(x, y, z);
+      projectedTri.UpdateCenter();
+      projectedTri.color = tri.color;
+
+      if (InView(projectedTri))
+      {
+         projectedMesh.tris.push_back(projectedTri);
+      }
+   }
+}
+
+void MeshManager::ClipMesh()
+{
+   vector3 rightPlaneNorm(-1.0f, 0.0f, 0.0f);
+   vector3 topPlaneNorm(0.0f, -1.0f, 0.0f);
+   vector3 leftPlaneNorm(1.0f, 0.0f, 0.0f);
+   vector3 bottomPlaneNorm(0.0f, 1.0f, 0.0f);
+
+   vector3 rightPlanePoint(1.0f, 0.0f, 0.0f);
+   vector3 topPlanePoint(0.0f, 1.0f, 0.0f);
+   vector3 leftPlanePoint(-1.0f, 0.0f, 0.0f);
+   vector3 bottomPlanePoint(0.0f, -1.0f, 0.0f);
+
+   Clip(projectedMesh, rightPlaneNorm, rightPlanePoint, &clippedMesh);
+   Clip(clippedMesh, topPlaneNorm, topPlanePoint, &clippedMesh);
+   Clip(clippedMesh, leftPlaneNorm, leftPlanePoint, &clippedMesh);
+   Clip(clippedMesh, bottomPlaneNorm, bottomPlanePoint, &clippedMesh);
+}
+
+void MeshManager::Clip(Mesh _mesh, vector3 planeNorm, vector3 planePoint, Mesh* outMesh)
+{
+   for (auto&& tri : _mesh.tris)
+   {
+      float signSum{};
+      triple clippedTri1;
+      triple clippedTri2;
+
       float checkP1 = vector3::Dot(planeNorm, tri.p1 - planePoint);
       float checkP2 = vector3::Dot(planeNorm, tri.p2 - planePoint);
       float checkP3 = vector3::Dot(planeNorm, tri.p3 - planePoint);
       float checkP1Sign = (checkP1 / abs(checkP1));
       float checkP2Sign = (checkP2 / abs(checkP2));
       float checkP3Sign = (checkP3 / abs(checkP3));
-      vector<float> checkVec;
-      vector<vector3> pointsVec;
+      std::vector<float> checkVec;
+      std::vector<vector3> pointsVec;
       checkVec.push_back(checkP1);
       checkVec.push_back(checkP2);
       checkVec.push_back(checkP3);
@@ -636,7 +515,7 @@ std::vector<triple> MeshManager::Clip(std::vector<triple> _mesh, vector3 planeNo
 
       if (signSum == 3)
       {
-         clippedMesh.push_back(tri);
+         outMesh->tris.push_back(tri);
       }
       else if (signSum == -3)
       {
@@ -681,8 +560,8 @@ std::vector<triple> MeshManager::Clip(std::vector<triple> _mesh, vector3 planeNo
          clippedTri2.UpdateCenter();
          //clippedTri2.color = vector3(0, 1, 0);
          clippedTri2.color = tri.color;
-         clippedMesh.push_back(clippedTri1);
-         clippedMesh.push_back(clippedTri2);
+         outMesh->tris.push_back(clippedTri1);
+         outMesh->tris.push_back(clippedTri2);
       }
       else // Create single new triangle
       {
@@ -715,48 +594,15 @@ std::vector<triple> MeshManager::Clip(std::vector<triple> _mesh, vector3 planeNo
          //clippedTri1.color = vector3(0, 0, 1);
          clippedTri1.color = tri.color;
 
-         clippedMesh.push_back(clippedTri1);
+         outMesh->tris.push_back(clippedTri1);
       }
    }
-   return clippedMesh;
-}
-
-std::vector<triple> MeshManager::DepthClipMesh(std::vector<triple> _mesh)
-{
-   vector3 zPlaneNorm(0.0f, 0.0f, 1.0f);
-   vector3 zPoint(0.0f, 0.0f, zNear);
-
-   std::vector<triple> clippedMesh = Clip(_mesh, zPlaneNorm, zPoint);
-   return clippedMesh;
-}
-
-std::vector<triple> MeshManager::ClipMesh(std::vector<triple> _mesh)
-{
-   vector3 rightPlaneNorm(-1.0f, 0.0f, 0.0f);
-   vector3 topPlaneNorm(0.0f, -1.0f, 0.0f);
-   vector3 leftPlaneNorm(1.0f, 0.0f, 0.0f);
-   vector3 bottomPlaneNorm(0.0f, 1.0f, 0.0f);
-
-   vector3 rightPlanePoint(1.0f, 0.0f, 0.0f);
-   vector3 topPlanePoint(0.0f, 1.0f, 0.0f);
-   vector3 leftPlanePoint(-1.0f, 0.0f, 0.0f);
-   vector3 bottomPlanePoint(0.0f, -1.0f, 0.0f);
-
-   std::vector<triple> clippedMesh = Clip(_mesh, rightPlaneNorm, rightPlanePoint); // Right Plane
-   clippedMesh = Clip(clippedMesh, topPlaneNorm, topPlanePoint); // Top Plane
-   clippedMesh = Clip(clippedMesh, leftPlaneNorm, leftPlanePoint); // Left Plane
-   clippedMesh = Clip(clippedMesh, bottomPlaneNorm, bottomPlanePoint); // Bottom Plane
-
-   return clippedMesh;
 }
 
 void MeshManager::Update(vector3 _cameraPos, quaternion _cameraQuat)
 {
    cameraPos = _cameraPos;
    cameraQuat = _cameraQuat;
-
-   TransformMesh();
-   vector3 meshCenter = GetCenter(screenMeshes[0]);
 
    /*std::cout << "\rPOS: X: " << cameraPos.x << ", Y: " << cameraPos.y << ", Z: " << cameraPos.z << "                                                  " << std::endl;
    std::cout << "WORLD SPACE MESH CENTER: X: " << meshCenters[0].x << ", Y: " << meshCenters[0].y << ", Z: " << meshCenters[0].z << "                                                 " << std::endl;
@@ -792,56 +638,40 @@ void MeshManager::Update(vector3 _cameraPos, quaternion _cameraQuat)
 
 void MeshManager::Render()
 {
-   std::vector<triple> depthClippedMesh;
-   std::vector<triple> projectedMesh;
-   std::vector<triple> clippedMesh;
 
-   int count = 0;
-   for (auto&& mesh : screenMeshes)
+
+   for (int i = 0; i < worldMeshes.size(); i++)
    {
-      std::vector<triple> toRender;
-      depthClippedMesh = DepthClipMesh(mesh);
-      projectedMesh = ProjectMesh(depthClippedMesh);
-      clippedMesh = ClipMesh(projectedMesh);
+      screenMeshes[i].tris.clear();
+      depthClippedMesh.tris.clear();
+      projectedMesh.tris.clear();
+      clippedMesh.tris.clear();
+      renderMesh.tris.clear();
 
-      for (auto&& tri : clippedMesh)
+      activeMeshIndex = i;
+
+      TransformMesh();
+      DepthClipMesh();
+      ProjectMesh();
+      ClipMesh();
+
+      for (auto&& tri : clippedMesh.tris)
       {
          if (InView(tri))
          {
-            toRender.push_back(tri);
+            renderMesh.tris.push_back(tri);
          }
       }
-      //ShadeMesh(toRender);
-      
-      std::sort(toRender.begin(), toRender.end(), [](triple& tri1, triple& tri2)
+
+      std::sort(renderMesh.tris.begin(), renderMesh.tris.end(), [](triple& tri1, triple& tri2)
          {
             return (tri2.center.z > tri1.center.z);
          });
 
-      for (auto&& tri : toRender)
+      for (auto&& tri : renderMesh.tris)
       {
          rasterer.DrawTriangle(tri, true);
       }
-   }
-
-}
-
-void MeshManager::TransformMesh()
-{
-   screenMeshes.clear();
-   triple tempTri;
-   for (auto&& mesh : worldMeshes)
-   {
-      std::vector<triple> newMesh;
-      for (auto&& tri : mesh)
-      {
-         tempTri = tri - cameraPos;
-         tempTri = Rotation::Rotate(tempTri, cameraQuat, 1);
-
-         tempTri.color = tri.color;
-         tempTri.UpdateCenter();
-         newMesh.push_back(tempTri);
-      }
-      screenMeshes.push_back(newMesh);
+      //ShadeMesh(toRender);
    }
 }

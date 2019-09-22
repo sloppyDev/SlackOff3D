@@ -212,7 +212,7 @@ void Raster::DrawPoint(vector3 point)
    glPointSize(1.0f);
    glBegin(GL_POINTS);
    {
-      glColor4f(color.x, color.y, color.z, 1);
+      glColor3f(color.x, color.y, color.z);
       glVertex2f(point.x, point.y);
    }
    glEnd();
@@ -244,7 +244,7 @@ void Raster::DrawLine(vector3 p1, vector3 p2)
    float xDraw = leftX;
    glBegin(GL_LINES);
    {
-      glColor4f(color.x, color.y, color.z, 1);
+      glColor3f(color.x, color.y, color.z);
       glVertex2f(leftX, leftY);
       glVertex2f(rightX, rightY);
    }
@@ -264,7 +264,7 @@ void Raster::DrawLine(vector3 p1, vector3 p2)
 
 void Raster::DrawWireframe(triple tri)
 {
-   glColor4f(0, 0, 0, 1);
+   glColor3f(0, 0, 0);
    glLineWidth(2.5f);
    glBegin(GL_LINES);
    {

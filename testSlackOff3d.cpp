@@ -7,11 +7,13 @@ using namespace std;
 
 int main()
 {
+   vector<string> meshPaths;
+   meshPaths.push_back("C:/Users/Joe/Desktop/utahTeapot.obj");
    cout << "SlackOff3D Test" << endl;
    Engine engine;
    engine.Initialize();
    CameraManager cameraManager;
-   MeshManager meshManager(cameraManager.GetPos(), cameraManager.GetQuat());
+   MeshManager meshManager(meshPaths, cameraManager.GetPos(), cameraManager.GetQuat());
 
 
    while (true)
